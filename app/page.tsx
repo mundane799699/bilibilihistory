@@ -89,11 +89,21 @@ export default function Home() {
             <span className="text-2xl font-bold text-[#00a1d6]">Bilibili 无限历史记录</span>
           </div>
           <div className="flex items-center space-x-6">
-            <Link href="/docs" className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors">
+            <Link
+              href="https://v3oxu28gnc.feishu.cn/docx/MZp8dCXd1otO9oxevQUcIlxFnPg?from=from_copylink"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+            >
               文档
             </Link>
-            <Link href="#download" className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors">
-              下载插件
+            <Link
+              href="https://c1p0xw7om7n.feishu.cn/base/OZvTb3qF1aK064shyA7cbJ2OnOh?from=from_copylink"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+            >
+              提交建议
             </Link>
           </div>
         </div>
@@ -115,17 +125,26 @@ export default function Home() {
           <p className="text-xl sm:text-2xl mb-10 max-w-2xl mx-auto font-light">
             你的专属B站时光机，永久珍藏每一段观看记忆，不再错过任何精彩瞬间。
           </p>
-          <Button
-            id="download"
-            size="lg"
-            className="bg-[#fb7299] hover:bg-[#e05f85] text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 inline-flex items-center shadow-lg hover:shadow-xl hover:-translate-y-1"
-          >
-            <Download className="mr-2 h-5 w-5" />
-            立即安装扩展
-          </Button>
-          <div className="mt-6 text-sm inline-flex items-center justify-center bg-white/10 py-2 px-4 rounded-full backdrop-blur-sm">
-            <Lock className="mr-2 h-4 w-4" />
-            完全免费，本地存储，安全可靠
+          <div className="flex flex-col items-center">
+            <Button
+              id="download"
+              size="lg"
+              className="bg-[#fb7299] hover:bg-[#e05f85] text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 inline-flex items-center shadow-lg hover:shadow-xl hover:-translate-y-1"
+              asChild
+            >
+              <Link
+                href="https://chromewebstore.google.com/detail/bilibili-%E6%97%A0%E9%99%90%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95/cfloggaggkeocfoflejkmhdhbehjojga?hl=zh"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Download className="mr-2 h-5 w-5" />
+                安装 Chrome 插件
+              </Link>
+            </Button>
+            <div className="mt-4 text-sm inline-flex items-center justify-center bg-white/10 py-2 px-4 rounded-full backdrop-blur-sm">
+              <Lock className="mr-2 h-4 w-4" />
+              完全免费，本地存储，安全可靠
+            </div>
           </div>
         </div>
       </header>
@@ -265,15 +284,15 @@ export default function Home() {
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-6">Bilibili 无限历史记录</h2>
             <p className="text-gray-400 mb-8 max-w-2xl mx-auto">让每一次B站观看都被永久珍藏，打造你的专属时光机。</p>
-            <div className="flex justify-center space-x-6 mb-8">
-              <Button variant="outline" className="border-[#00a1d6] text-[#00a1d6] hover:bg-[#00a1d6] hover:text-white">
-                <BookOpen className="mr-2 h-4 w-4" />
-                查看文档
-              </Button>
-              <Button className="bg-[#fb7299] hover:bg-[#e05f85] text-white">
-                <Download className="mr-2 h-4 w-4" />
-                立即下载
-              </Button>
+            <div className="text-center mb-8">
+              <h3 className="text-xl font-medium mb-4">扫码加入用户群</h3>
+              <div className="flex justify-center">
+                <img
+                  src="/images/wechat-qrcode.png"
+                  alt="微信用户群二维码"
+                  className="w-48 h-48 bg-white p-2 rounded-md shadow-md"
+                />
+              </div>
             </div>
             <div className="text-sm text-gray-500">© 2024 Bilibili 无限历史记录 | 非官方工具，与哔哩哔哩官方无关</div>
           </div>
