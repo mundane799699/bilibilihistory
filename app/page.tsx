@@ -13,7 +13,7 @@ export default function Home() {
     {
       icon: <History className="h-6 w-6" />,
       title: "智能时间回溯",
-      description: "按观看时间精确排序，轻松回顾&quot;当年今日&quot;在看什么视频内容。",
+      description: "按观看时间精确排序，轻松回顾;当年今日;在看什么视频内容。",
     },
     {
       icon: <Search className="h-6 w-6" />,
@@ -52,12 +52,12 @@ export default function Home() {
     {
       icon: <History className="h-7 w-7 text-[#00a1d6]" />,
       title: "怀旧与考古乐趣 ⏳",
-      description: "化身&quot;B站考古学家&quot;，发现被遗忘的宝藏。重温那些年你看过的经典视频，找回美好回忆。",
+      description: "化身B站考古学家;，发现被遗忘的宝藏。重温那些年你看过的经典视频，找回美好回忆。",
     },
     {
       icon: <Share2 className="h-7 w-7 text-[#00a1d6]" />,
       title: "日常查找与分享 🗣️",
-      description: "快速定位视频，即时分享，不再尴尬。当朋友问起&quot;你之前推荐的那个视频是哪个&quot;，立刻找到！",
+      description: "快速定位视频，即时分享，不再尴尬。当朋友问起;你之前推荐的那个视频是哪个;，立刻找到！",
     },
   ]
 
@@ -66,7 +66,7 @@ export default function Home() {
     {
       number: 1,
       title: "安装扩展",
-      description: "从Chrome商店或Edge商店下载并安装&quot;Bilibili 无限历史记录&quot;扩展。",
+      description: "从Chrome商店或Edge商店下载并安装;Bilibili 无限历史记录;扩展。",
     },
     {
       number: 2,
@@ -116,9 +116,6 @@ export default function Home() {
           <div className="absolute left-0 bottom-0 w-96 h-96 bg-white rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         </div>
         <div className="container mx-auto max-w-4xl relative z-10 text-center">
-          <span className="inline-block py-1 px-3 bg-white/20 text-white rounded-full text-sm mb-4 backdrop-blur-sm">
-            B站历史记录增强工具
-          </span>
           <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
             Bilibili 无限历史记录 <span className="inline-block animate-bounce">🚀</span>
           </h1>
@@ -143,7 +140,7 @@ export default function Home() {
             </Button>
             <div className="mt-4 text-sm inline-flex items-center justify-center bg-white/10 py-2 px-4 rounded-full backdrop-blur-sm">
               <Lock className="mr-2 h-4 w-4" />
-              完全免费，本地存储，安全可靠
+              即时同步，本地存储，安全可靠
             </div>
           </div>
         </div>
@@ -153,12 +150,10 @@ export default function Home() {
       <section className="py-16 sm:py-20 px-6">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <span className="inline-block py-1 px-3 bg-[#b3e5fc]/30 text-[#0076a8] rounded-full text-sm mb-3">
-              常见问题
-            </span>
+          
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">还在为这些烦恼吗？</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              官方记录上限、想不起的教程UP主、找不到的追番系列... 那些珍贵的B站瞬间，不应轻易消失。
+              官方记录上限、想不起的教程UP主、找不到的追番系列... 那些B站瞬间，不应轻易消失。
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8 sm:gap-10">
@@ -191,9 +186,6 @@ export default function Home() {
       <section className="py-16 sm:py-20 px-6 bg-white">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <span className="inline-block py-1 px-3 bg-[#ffd6e7]/50 text-[#fb7299] rounded-full text-sm mb-3">
-              核心功能
-            </span>
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
               ✨ 【Bilibili 无限历史记录】为你而来！
             </h2>
@@ -224,9 +216,6 @@ export default function Home() {
       <section className="py-16 sm:py-20 px-6 bg-gray-50">
         <div className="container mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <span className="inline-block py-1 px-3 bg-[#b3e5fc]/30 text-[#0076a8] rounded-full text-sm mb-3">
-              应用场景
-            </span>
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">满足你的多样需求</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">无论学习、娱乐还是工作，都能让你的B站体验更加完整</p>
           </div>
@@ -253,9 +242,6 @@ export default function Home() {
       <section className="py-16 sm:py-20 px-6 bg-gradient-to-b from-blue-50 to-white">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
-            <span className="inline-block py-1 px-3 bg-[#ffd6e7]/50 text-[#fb7299] rounded-full text-sm mb-3">
-              使用指南
-            </span>
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">📝 三步开启无限之旅</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">简单快捷，立即体验无限历史记录的便利</p>
           </div>
@@ -294,7 +280,7 @@ export default function Home() {
                 />
               </div>
             </div>
-            <div className="text-sm text-gray-500">© 2024 Bilibili 无限历史记录 | 非官方工具，与哔哩哔哩官方无关</div>
+            <div className="text-sm text-gray-500">© 2024 Bilibili 无限历史记录 丨你的专属时光机</div>
           </div>
         </div>
       </footer>
