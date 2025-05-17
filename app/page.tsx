@@ -118,7 +118,7 @@ export default function Home() {
               文档
             </Link>
             <Link
-              href="https://c1p0xw7om7n.feishu.cn/base/OZvTb3qF1aK064shyA7cbJ2OnOh?from=from_copylink"
+              href="https://c1p0xw7om7n.feishu.cn/share/base/form/shrcneS0t8RdC3byY9xC5ftQgub"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
