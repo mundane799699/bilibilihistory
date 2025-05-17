@@ -181,7 +181,7 @@ export default function Home() {
               asChild
             >
               <Link
-                href="https://pan.quark.cn/s/c6d60f56bf98"
+                href="https://pan.baidu.com/s/1y2f1z_jWjQaS8uKzkNUvfg?pwd=fra4"
                 target="_blank"
                 rel="noopener noreferrer"
               >
