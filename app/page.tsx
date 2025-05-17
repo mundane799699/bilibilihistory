@@ -189,10 +189,6 @@ export default function Home() {
                 安装 Firefox 插件
               </Link>
             </Button>
-            <div className="mt-4 text-sm inline-flex items-center justify-center bg-white/10 py-2 px-4 rounded-full backdrop-blur-sm">
-              <Lock className="mr-2 h-4 w-4" />
-              即时同步，本地存储，安全可靠
-            </div>
           </div>
         </div>
       </header>
