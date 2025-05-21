@@ -174,21 +174,21 @@ export default function Home() {
                 安装 Edge 插件
               </Link>
             </Button>
-            {/* <Button
+            <Button
               id="download"
               size="lg"
               className="mt-4 bg-[#fb7299] hover:bg-[#e05f85] text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 inline-flex items-center shadow-lg hover:shadow-xl"
               asChild
             >
               <Link
-                href="https://pan.baidu.com/s/1y2f1z_jWjQaS8uKzkNUvfg?pwd=fra4"
+                href="https://addons.mozilla.org/zh-CN/firefox/addon/bilibili-%E6%97%A0%E9%99%90%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <Download className="mr-2 h-5 w-5" />
                 安装 Firefox 插件
               </Link>
-            </Button> */}
+            </Button>
           </div>
         </div>
       </header>
