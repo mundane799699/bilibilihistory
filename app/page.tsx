@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,9 +13,29 @@ import {
   Lightbulb,
   History,
   Share2,
+  User,
 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [user, setUser] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getSession = async () => {
+      try {
+        const { data: session } = await authClient.getSession();
+        setUser(session?.user || null);
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getSession();
+  }, []);
   // 定义功能卡片数据
   const features = [
     {
@@ -125,6 +147,36 @@ export default function Home() {
             >
               提交建议
             </Link>
+
+            {/* 根据登录状态显示不同内容 */}
+            {isLoading ? (
+              <div className="text-gray-500">加载中...</div>
+            ) : user ? (
+              // 已登录状态 - 显示用户名和跳转到仪表板
+              <Link
+                href="/dashboard"
+                className="flex items-center space-x-2 bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              >
+                <User className="h-4 w-4" />
+                <span>{user.name}</span>
+              </Link>
+            ) : (
+              // 未登录状态 - 显示登录和注册按钮
+              <>
+                <Link
+                  href="/login"
+                  className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+                >
+                  登录
+                </Link>
+                <Link
+                  href="/register"
+                  className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  注册
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>
@@ -137,7 +189,7 @@ export default function Home() {
         </div>
         <div className="container mx-auto max-w-4xl relative z-10 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
-            Bilibili 无限历史记录{" "}
+            Bilibili 无限历史记录
             <span className="inline-block animate-bounce">🚀</span>
           </h1>
           <p className="text-xl sm:text-2xl mb-10 max-w-2xl mx-auto font-light">
