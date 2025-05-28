@@ -14,6 +14,8 @@ import {
   History,
   Share2,
   User,
+  FileText,
+  MessageSquare,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useEffect, useState } from "react";
@@ -131,7 +133,7 @@ export default function Home() {
               alt="Bilibili 无限历史记录 Logo"
               className="w-8 h-8"
             />
-            <span className="text-xl font-bold text-[#00a1d6]">
+            <span className="text-xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
               Bilibili 无限历史记录
             </span>
           </div>
@@ -140,17 +142,19 @@ export default function Home() {
               href="https://v3oxu28gnc.feishu.cn/docx/MZp8dCXd1otO9oxevQUcIlxFnPg?from=from_copylink"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+              className="flex items-center space-x-1 text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
             >
-              文档
+              <FileText className="h-4 w-4" />
+              <span>文档</span>
             </Link>
             <Link
               href="https://c1p0xw7om7n.feishu.cn/share/base/form/shrcneS0t8RdC3byY9xC5ftQgub"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+              className="flex items-center space-x-1 text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
             >
-              提交建议
+              <MessageSquare className="h-4 w-4" />
+              <span>提交建议</span>
             </Link>
 
             {/* 根据登录状态显示不同内容 */}
@@ -160,7 +164,7 @@ export default function Home() {
               // 已登录状态 - 显示用户名和跳转到仪表板
               <Link
                 href="/dashboard"
-                className="flex items-center space-x-2 bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                className="flex items-center space-x-2 bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
               >
                 <User className="h-4 w-4" />
                 <span>{user.name}</span>
@@ -176,7 +180,7 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/register"
-                  className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                  className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
                 >
                   注册
                 </Link>
@@ -187,39 +191,40 @@ export default function Home() {
       </nav>
 
       {/* 英雄区域 */}
-      <header className="bg-gradient-to-r from-[#00a1d6] to-[#0076a8] text-white py-20 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute right-0 top-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-          <div className="absolute left-0 bottom-0 w-96 h-96 bg-white rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+      <header className="bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 py-20 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute right-0 top-0 w-96 h-96 bg-gradient-to-bl from-[#00a1d6]/30 to-blue-300/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+          <div className="absolute left-0 bottom-0 w-96 h-96 bg-gradient-to-tr from-sky-300/20 to-[#00a1d6]/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+          <div className="absolute center-0 top-1/2 w-64 h-64 bg-gradient-to-r from-indigo-200/10 to-blue-200/10 rounded-full blur-2xl"></div>
         </div>
         <div className="container mx-auto max-w-4xl relative z-10 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
             Bilibili 无限历史记录
             <span className="inline-block animate-bounce">🚀</span>
           </h1>
-          <p className="text-xl sm:text-2xl mb-10 max-w-2xl mx-auto font-light">
+          <p className="text-xl sm:text-2xl mb-10 max-w-2xl mx-auto font-light text-slate-700">
             你的专属B站时光机，永久珍藏每一段观看记忆，不再错过任何精彩瞬间。
           </p>
           
           {/* 浏览器插件下载区域 */}
           <div className="flex flex-col items-center mt-8">
-            <h3 className="text-lg font-medium mb-8 text-white/90">安装浏览器插件</h3>
+            <h3 className="text-lg font-medium mb-8 text-slate-600">安装浏览器插件</h3>
             <div className="flex flex-wrap justify-center items-center gap-8">
               {/* Chrome */}
               <Link
                 href="https://chromewebstore.google.com/detail/bilibili-%E6%97%A0%E9%99%90%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95/cfloggaggkeocfoflejkmhdhbehjojga?hl=zh"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[160px]"
+                className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
               >
-                <div className="w-20 h-20 mb-5 flex items-center justify-center">
+                <div className="w-14 h-14 mb-5 flex items-center justify-center">
                   <img 
                     src="/images/chrome.svg" 
                     alt="Chrome"
-                    className="w-16 h-16"
+                    className="w-12 h-12"
                   />
                 </div>
-                <span className="text-white font-medium text-sm group-hover:text-yellow-200 transition-colors">Chrome</span>
+                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">Chrome</span>
               </Link>
 
               {/* Edge */}
@@ -227,16 +232,16 @@ export default function Home() {
                 href="https://microsoftedge.microsoft.com/addons/detail/ekdaecpdimflnhalemibjjjdfoplnbna"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[160px]"
+                className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
               >
-                <div className="w-20 h-20 mb-5 flex items-center justify-center">
+                <div className="w-14 h-14 mb-5 flex items-center justify-center">
                   <img 
                     src="/images/microsoft-edge.svg" 
                     alt="Microsoft Edge"
-                    className="w-16 h-16"
+                    className="w-12 h-12"
                   />
                 </div>
-                <span className="text-white font-medium text-sm group-hover:text-blue-200 transition-colors">Edge</span>
+                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">Edge</span>
               </Link>
 
               {/* Firefox */}
@@ -244,16 +249,16 @@ export default function Home() {
                 href="https://addons.mozilla.org/zh-CN/firefox/addon/bilibili-%E6%97%A0%E9%99%90%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[160px]"
+                className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
               >
-                <div className="w-20 h-20 mb-5 flex items-center justify-center">
+                <div className="w-14 h-14 mb-5 flex items-center justify-center">
                   <img 
                     src="/images/Firefox.svg" 
                     alt="Firefox"
-                    className="w-16 h-16"
+                    className="w-12 h-12"
                   />
                 </div>
-                <span className="text-white font-medium text-sm group-hover:text-orange-200 transition-colors">Firefox</span>
+                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">Firefox</span>
               </Link>
             </div>
           </div>

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FileText, MessageSquare } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -51,7 +52,7 @@ export default function LoginPage() {
               alt="Bilibili 无限历史记录 Logo"
               className="w-8 h-8"
             />
-            <Link href="/" className="text-xl font-bold text-[#00a1d6]">
+            <Link href="/" className="text-xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
               Bilibili 无限历史记录
             </Link>
           </div>
@@ -60,21 +61,23 @@ export default function LoginPage() {
               href="https://v3oxu28gnc.feishu.cn/docx/MZp8dCXd1otO9oxevQUcIlxFnPg?from=from_copylink"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+              className="flex items-center space-x-1 text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
             >
-              文档
+              <FileText className="h-4 w-4" />
+              <span>文档</span>
             </Link>
             <Link
               href="https://c1p0xw7om7n.feishu.cn/share/base/form/shrcneS0t8RdC3byY9xC5ftQgub"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+              className="flex items-center space-x-1 text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
             >
-              提交建议
+              <MessageSquare className="h-4 w-4" />
+              <span>提交建议</span>
             </Link>
             <Link
               href="/register"
-              className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-2 rounded-lg font-medium transition-colors"
+              className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
             >
               注册
             </Link>

@@ -55,35 +55,25 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* 顶部导航栏 */}
-      <div className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            {/* 左上角 - logo + 文字 */}
-            <div 
-              onClick={() => router.push("/")}
-              className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
-            >
-              <img 
-                src="/images/icon.svg" 
-                alt="Bilibili 无限历史记录 Logo"
-                className="w-8 h-8"
-              />
-              <span className="text-xl font-bold text-[#00a1d6]">
-                Bilibili 无限历史记录
-              </span>
-            </div>
-
-            {/* 右上角 - 退出登录 */}
-            <Button
-              onClick={handleSignOut}
-              variant="outline"
-              className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-            >
-              退出登录
-            </Button>
+      <nav className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <img src="/images/icon.svg" alt="Logo" className="w-8 h-8"/>
+            <span className="text-xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
+              Bilibili 无限历史记录
+            </span>
           </div>
+
+          {/* 右上角 - 退出登录 */}
+          <Button
+            onClick={handleSignOut}
+            variant="outline"
+            className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 px-4 py-1.5"
+          >
+            退出登录
+          </Button>
         </div>
-      </div>
+      </nav>
 
       {/* 主要内容区域 */}
       <div className="py-12 px-4 sm:px-6 lg:px-8">
