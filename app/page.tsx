@@ -124,9 +124,14 @@ export default function Home() {
     <div className="min-h-screen bg-gray-50">
       {/* 导航栏 */}
       <nav className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-[#00a1d6]">
+            <img 
+              src="/images/icon.svg" 
+              alt="Bilibili 无限历史记录 Logo"
+              className="w-8 h-8"
+            />
+            <span className="text-xl font-bold text-[#00a1d6]">
               Bilibili 无限历史记录
             </span>
           </div>
@@ -195,52 +200,62 @@ export default function Home() {
           <p className="text-xl sm:text-2xl mb-10 max-w-2xl mx-auto font-light">
             你的专属B站时光机，永久珍藏每一段观看记忆，不再错过任何精彩瞬间。
           </p>
-          <div className="flex flex-col items-center">
-            <Button
-              id="download"
-              size="lg"
-              className="bg-[#fb7299] hover:bg-[#e05f85] text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 inline-flex items-center shadow-lg hover:shadow-xl"
-              asChild
-            >
+          
+          {/* 浏览器插件下载区域 */}
+          <div className="flex flex-col items-center mt-8">
+            <h3 className="text-lg font-medium mb-8 text-white/90">安装浏览器插件</h3>
+            <div className="flex flex-wrap justify-center items-center gap-8">
+              {/* Chrome */}
               <Link
                 href="https://chromewebstore.google.com/detail/bilibili-%E6%97%A0%E9%99%90%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95/cfloggaggkeocfoflejkmhdhbehjojga?hl=zh"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="group flex flex-col items-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[160px]"
               >
-                <Download className="mr-2 h-5 w-5" />
-                安装 Chrome 插件
+                <div className="w-20 h-20 mb-5 flex items-center justify-center">
+                  <img 
+                    src="/images/chrome.svg" 
+                    alt="Chrome"
+                    className="w-16 h-16"
+                  />
+                </div>
+                <span className="text-white font-medium text-sm group-hover:text-yellow-200 transition-colors">Chrome</span>
               </Link>
-            </Button>
-            <Button
-              id="download"
-              size="lg"
-              className="mt-4 bg-[#fb7299] hover:bg-[#e05f85] text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 inline-flex items-center shadow-lg hover:shadow-xl"
-              asChild
-            >
+
+              {/* Edge */}
               <Link
                 href="https://microsoftedge.microsoft.com/addons/detail/ekdaecpdimflnhalemibjjjdfoplnbna"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="group flex flex-col items-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[160px]"
               >
-                <Download className="mr-2 h-5 w-5" />
-                安装 Edge 插件
+                <div className="w-20 h-20 mb-5 flex items-center justify-center">
+                  <img 
+                    src="/images/microsoft-edge.svg" 
+                    alt="Microsoft Edge"
+                    className="w-16 h-16"
+                  />
+                </div>
+                <span className="text-white font-medium text-sm group-hover:text-blue-200 transition-colors">Edge</span>
               </Link>
-            </Button>
-            <Button
-              id="download"
-              size="lg"
-              className="mt-4 bg-[#fb7299] hover:bg-[#e05f85] text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 inline-flex items-center shadow-lg hover:shadow-xl"
-              asChild
-            >
+
+              {/* Firefox */}
               <Link
                 href="https://addons.mozilla.org/zh-CN/firefox/addon/bilibili-%E6%97%A0%E9%99%90%E5%8E%86%E5%8F%B2%E8%AE%B0%E5%BD%95/"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="group flex flex-col items-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl hover:bg-white/20 transition-all duration-300 hover:scale-105 hover:shadow-xl min-w-[160px]"
               >
-                <Download className="mr-2 h-5 w-5" />
-                安装 Firefox 插件
+                <div className="w-20 h-20 mb-5 flex items-center justify-center">
+                  <img 
+                    src="/images/Firefox.svg" 
+                    alt="Firefox"
+                    className="w-16 h-16"
+                  />
+                </div>
+                <span className="text-white font-medium text-sm group-hover:text-orange-200 transition-colors">Firefox</span>
               </Link>
-            </Button>
+            </div>
           </div>
         </div>
       </header>

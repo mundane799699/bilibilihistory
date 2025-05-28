@@ -58,14 +58,20 @@ export default function DashboardPage() {
       <div className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            {/* 左上角 - 返回首页 */}
-            <Button
+            {/* 左上角 - logo + 文字 */}
+            <div 
               onClick={() => router.push("/")}
-              variant="outline"
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity"
             >
-              <span>← 返回首页</span>
-            </Button>
+              <img 
+                src="/images/icon.svg" 
+                alt="Bilibili 无限历史记录 Logo"
+                className="w-8 h-8"
+              />
+              <span className="text-xl font-bold text-[#00a1d6]">
+                Bilibili 无限历史记录
+              </span>
+            </div>
 
             {/* 右上角 - 退出登录 */}
             <Button
