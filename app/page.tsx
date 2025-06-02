@@ -128,8 +128,8 @@ export default function Home() {
       <nav className="bg-white shadow-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <img 
-              src="/images/icon.svg" 
+            <img
+              src="/images/icon.svg"
               alt="Bilibili 无限历史记录 Logo"
               className="w-8 h-8"
             />
@@ -205,10 +205,12 @@ export default function Home() {
           <p className="text-xl sm:text-2xl mb-10 max-w-2xl mx-auto font-light text-slate-700">
             你的专属B站时光机，永久珍藏每一段观看记忆，不再错过任何精彩瞬间。
           </p>
-          
+
           {/* 浏览器插件下载区域 */}
           <div className="flex flex-col items-center mt-8">
-            <h3 className="text-lg font-medium mb-8 text-slate-600">安装浏览器插件</h3>
+            <h3 className="text-lg font-medium mb-8 text-slate-600">
+              安装浏览器插件
+            </h3>
             <div className="flex flex-wrap justify-center items-center gap-8">
               {/* Chrome */}
               <Link
@@ -218,13 +220,15 @@ export default function Home() {
                 className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
               >
                 <div className="w-14 h-14 mb-5 flex items-center justify-center">
-                  <img 
-                    src="/images/chrome.svg" 
+                  <img
+                    src="/images/chrome.svg"
                     alt="Chrome"
                     className="w-12 h-12"
                   />
                 </div>
-                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">Chrome</span>
+                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">
+                  Chrome
+                </span>
               </Link>
 
               {/* Edge */}
@@ -235,13 +239,15 @@ export default function Home() {
                 className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
               >
                 <div className="w-14 h-14 mb-5 flex items-center justify-center">
-                  <img 
-                    src="/images/microsoft-edge.svg" 
+                  <img
+                    src="/images/microsoft-edge.svg"
                     alt="Microsoft Edge"
                     className="w-12 h-12"
                   />
                 </div>
-                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">Edge</span>
+                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">
+                  Edge
+                </span>
               </Link>
 
               {/* Firefox */}
@@ -252,13 +258,30 @@ export default function Home() {
                 className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
               >
                 <div className="w-14 h-14 mb-5 flex items-center justify-center">
-                  <img 
-                    src="/images/Firefox.svg" 
+                  <img
+                    src="/images/Firefox.svg"
                     alt="Firefox"
                     className="w-12 h-12"
                   />
                 </div>
-                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">Firefox</span>
+                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">
+                  Firefox
+                </span>
+              </Link>
+
+              {/* 离线压缩包 */}
+              <Link
+                href="https://cdn.dreamfree.xyz/bilibilihistory/bilibili-unlimited-history-1.6.2-chrome.zip"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
+              >
+                <div className="w-14 h-14 mb-5 flex items-center justify-center">
+                  <Download className="w-12 h-12 text-[#00a1d6]" />
+                </div>
+                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">
+                  离线压缩包
+                </span>
               </Link>
             </div>
           </div>
