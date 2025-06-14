@@ -4,6 +4,7 @@ import {
   getUserHistory,
   upsertHistoryRecord,
   upsertHistoryRecords,
+  getUserHistoryCount,
 } from "@/lib/db/queries";
 import { headers } from "next/headers";
 
@@ -59,6 +60,19 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+    }
+
+    // 检查用户历史记录数量限制
+    const currentCount = await getUserHistoryCount(session.user.id);
+    console.log("currentCount = ", currentCount);
+    if (currentCount >= 500) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "目前免费用户最多可以上传500条历史记录",
+        },
+        { status: 400 }
+      );
     }
 
     // 数据清理：将空字符串转换为null，避免bigint类型转换错误

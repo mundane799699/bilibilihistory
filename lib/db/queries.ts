@@ -190,3 +190,13 @@ export async function getTagStats(userId: string) {
     .groupBy(bilibiliHistory.tagName)
     .orderBy(desc(sql`count(*)`));
 }
+
+// 获取用户历史记录总数
+export async function getUserHistoryCount(userId: string) {
+  const result = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(bilibiliHistory)
+    .where(eq(bilibiliHistory.userId, userId));
+
+  return result[0]?.count || 0;
+}
