@@ -49,29 +49,36 @@ export async function POST(request: NextRequest) {
 
     // 验证每条记录的必需字段
     for (const record of records) {
-      const { id, business, bvid, cid, title, viewTime, timestamp } = record;
+      const { id } = record;
 
-      if (
-        !id ||
-        !business ||
-        !bvid ||
-        !cid ||
-        !title ||
-        !viewTime ||
-        !timestamp
-      ) {
+      if (!id) {
         return NextResponse.json(
           {
-            error: `记录缺少必要参数: ${JSON.stringify(record)}`,
+            error: `记录缺少id: ${JSON.stringify(record)}`,
           },
           { status: 400 }
         );
       }
     }
 
+    // 数据清理：将空字符串转换为null，避免bigint类型转换错误
+    const cleanRecord = (record: any) => {
+      const cleaned = { ...record };
+
+      // 对于bigint类型字段，空字符串需要转换为null
+      const bigintFields = ["cid", "authorMid", "viewTime", "timestamp"];
+      bigintFields.forEach((field) => {
+        if (cleaned[field] === "" || cleaned[field] === undefined) {
+          cleaned[field] = null;
+        }
+      });
+
+      return cleaned;
+    };
+
     // 准备要upsert的数据
     const recordsToUpsert = records.map((record) => ({
-      ...record,
+      ...cleanRecord(record),
       userId: session.user.id,
     }));
 

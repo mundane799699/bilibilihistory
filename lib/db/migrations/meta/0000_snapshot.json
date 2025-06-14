@@ -1,5 +1,5 @@
 {
-  "id": "d7117f7f-733f-4b77-8ca2-68648b6c8f61",
+  "id": "34f2398d-6572-4669-bf34-c28c4b730520",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -24,25 +24,25 @@
           "name": "business",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "bvid": {
           "name": "bvid",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "cid": {
           "name": "cid",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "title": {
           "name": "title",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "tag_name": {
           "name": "tag_name",
@@ -60,7 +60,7 @@
           "name": "view_time",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "uri": {
           "name": "uri",
@@ -84,7 +84,7 @@
           "name": "timestamp",
           "type": "bigint",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",

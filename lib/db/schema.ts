@@ -18,17 +18,17 @@ export const bilibiliHistory = pgTable(
     userId: text("user_id").notNull(), // 用户ID，作为联合主键之一
 
     // B站历史记录的原始数据
-    business: text("business").notNull(), // 业务类型，如"archive"
-    bvid: text("bvid").notNull(), // B站视频ID
-    cid: bigint("cid", { mode: "number" }).notNull(), // 视频cid
-    title: text("title").notNull(), // 视频标题
+    business: text("business"), // 业务类型，如"archive"
+    bvid: text("bvid"), // B站视频ID
+    cid: bigint("cid", { mode: "number" }), // 视频cid
+    title: text("title"), // 视频标题
     tagName: text("tag_name"), // 标签名称
     cover: text("cover"), // 封面图URL
-    viewTime: bigint("view_time", { mode: "number" }).notNull(), // 观看时间戳
+    viewTime: bigint("view_time", { mode: "number" }), // 观看时间戳
     uri: text("uri"), // URI
     authorName: text("author_name"), // 作者名称
     authorMid: bigint("author_mid", { mode: "number" }), // 作者ID
-    timestamp: bigint("timestamp", { mode: "number" }).notNull(), // 时间戳
+    timestamp: bigint("timestamp", { mode: "number" }), // 时间戳
 
     // 我们自己的字段
     createdAt: timestamp("created_at").notNull().defaultNow(), // 记录创建时间
