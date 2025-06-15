@@ -16,6 +16,23 @@ export async function getUserHistory(userId: string, limit = 50) {
     .limit(limit);
 }
 
+// 获取用户的观看历史（分页版本）
+export async function getUserHistoryWithPagination(
+  userId: string,
+  page: number = 1,
+  pageSize: number = 50
+) {
+  const offset = (page - 1) * pageSize;
+  
+  return await db
+    .select()
+    .from(bilibiliHistory)
+    .where(eq(bilibiliHistory.userId, userId))
+    .orderBy(desc(bilibiliHistory.viewTime))
+    .limit(pageSize)
+    .offset(offset);
+}
+
 // 添加观看历史记录
 export async function addHistoryRecord(data: NewBilibiliHistory) {
   return await db

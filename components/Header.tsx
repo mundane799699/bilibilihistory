@@ -24,7 +24,10 @@ export default function Header({ user }: HeaderProps) {
   return (
     <nav className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
+        <div
+          className="flex items-center space-x-2 cursor-pointer"
+          onClick={() => router.push("/")}
+        >
           <img src="/images/icon.svg" alt="Logo" className="w-8 h-8" />
           <span className="text-xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
             Bilibili 无限历史记录

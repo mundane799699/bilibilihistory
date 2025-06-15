@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import {
   getUserHistory,
+  getUserHistoryWithPagination,
   upsertHistoryRecord,
   upsertHistoryRecords,
   getUserHistoryCount,
@@ -20,11 +21,42 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") || "50");
-
-    const history = await getUserHistory(session.user.id, limit);
-
-    return NextResponse.json({ history });
+    
+    // 检查是否有分页参数
+    const page = searchParams.get("page") || "1";
+    const pageSize = searchParams.get("pageSize") || "50";
+    
+    // 分页查询
+    const pageNum = parseInt(page);
+    const pageSizeNum = parseInt(pageSize);
+    
+    // 验证分页参数
+    if (pageNum < 1 || pageSizeNum < 1 || pageSizeNum > 100) {
+      return NextResponse.json(
+        { error: "分页参数无效：page必须≥1，pageSize必须在1-100之间" },
+        { status: 400 }
+      );
+    }
+    
+    // 获取总数和分页数据
+    const [history, totalCount] = await Promise.all([
+      getUserHistoryWithPagination(session.user.id, pageNum, pageSizeNum),
+      getUserHistoryCount(session.user.id)
+    ]);
+    
+    const totalPages = Math.ceil(totalCount / pageSizeNum);
+    
+    return NextResponse.json({
+      history,
+      pagination: {
+        page: pageNum,
+        pageSize: pageSizeNum,
+        totalCount,
+        totalPages,
+        hasNextPage: pageNum < totalPages,
+        hasPrevPage: pageNum > 1
+      }
+    });
   } catch (error) {
     console.error("获取历史记录失败:", error);
     return NextResponse.json({ error: "服务器错误" }, { status: 500 });
