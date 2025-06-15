@@ -15,7 +15,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   };
 
   return (
-    <div className="flex h-[calc(100vh-64px)]">
+    <div className="flex flex-1">
       {/* 左侧固定侧边栏 */}
       <Sidebar
         className="fixed left-0 top-16 bottom-0 z-40"
