@@ -2,16 +2,37 @@ import { HistoryItem as HistoryItemType } from "@/utils/types";
 import { getContentUrl } from "@/utils/common";
 import { Trash2 } from "lucide-react";
 import { getTypeTag } from "@/utils/common";
+import { deleteHistoryItem } from "@/lib/api";
+import { useState } from "react";
 
 interface HistoryItemProps {
   item: HistoryItemType;
   onDelete?: () => void;
 }
 
-
 export const HistoryItem: React.FC<HistoryItemProps> = ({ item, onDelete }) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleDelete = async (e: React.MouseEvent) => {
-    
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isDeleting) return;
+
+    try {
+      setIsDeleting(true);
+
+      // 调用api删除历史记录
+      await deleteHistoryItem(item.id);
+
+      // 删除成功，调用父组件的回调函数
+      onDelete?.();
+    } catch (error) {
+      console.error("删除历史记录失败:", error);
+      alert("删除失败，请重试");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -42,10 +63,18 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({ item, onDelete }) => {
                 {item.title}
               </h3>
               <button
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                className={`p-1 hover:bg-gray-100 rounded-full transition-colors ${
+                  isDeleting ? "opacity-50 cursor-not-allowed" : ""
+                }`}
                 onClick={handleDelete}
+                disabled={isDeleting}
+                title={isDeleting ? "删除中..." : "删除历史记录"}
               >
-                <Trash2 className="w-4 h-4 text-gray-500" />
+                <Trash2
+                  className={`w-4 h-4 ${
+                    isDeleting ? "text-gray-300" : "text-gray-500"
+                  }`}
+                />
               </button>
             </div>
             <div className="flex justify-between items-center text-gray-500 text-xs mt-1">
