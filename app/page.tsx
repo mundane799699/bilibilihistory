@@ -174,15 +174,9 @@ export default function Home() {
               <>
                 <Link
                   href="/login"
-                  className="text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
-                >
-                  登录
-                </Link>
-                <Link
-                  href="/register"
                   className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
                 >
-                  注册
+                  登录
                 </Link>
               </>
             )}

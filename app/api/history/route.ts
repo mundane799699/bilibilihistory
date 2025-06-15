@@ -102,8 +102,7 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           message: "目前免费用户最多可以上传500条历史记录",
-        },
-        { status: 400 }
+        }
       );
     }
 
@@ -112,7 +111,7 @@ export async function POST(request: NextRequest) {
       const cleaned = { ...record };
 
       // 对于bigint类型字段，空字符串需要转换为null
-      const bigintFields = ["cid", "authorMid", "viewTime", "timestamp"];
+      const bigintFields = ["cid", "author_mid", "view_at", "timestamp"];
       bigintFields.forEach((field) => {
         if (cleaned[field] === "" || cleaned[field] === undefined) {
           cleaned[field] = null;
@@ -125,7 +124,7 @@ export async function POST(request: NextRequest) {
     // 准备要upsert的数据
     const recordsToUpsert = records.map((record) => ({
       ...cleanRecord(record),
-      userId: session.user.id,
+      user_id: session.user.id,
     }));
 
     // 执行批量upsert

@@ -132,12 +132,11 @@ export default function DashboardPage() {
   }, [hasMore, isLoading]);
 
   const getLoadMoreText = () => {
-    if (history.length === 0) {
-      return keyword.trim() ? "没有找到匹配的历史记录" : "暂无历史记录";
-    }
-
     if (isLoading) {
       return "加载中...";
+    }
+    if (history.length === 0) {
+      return keyword.trim() ? "没有找到匹配的历史记录" : "暂无历史记录";
     }
 
     if (hasMore) {

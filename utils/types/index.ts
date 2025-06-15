@@ -3,7 +3,7 @@ export interface HistoryItem {
   title: string;
   cover: string;
   business: "archive" | "pgc" | "article" | "article-list" | "live" | "cheese";
-  viewTime: number;
+  view_at: number;
   id: string;
   cid?: string;
   author_name: string;

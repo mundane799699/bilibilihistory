@@ -7,12 +7,12 @@ import {
 import { eq, desc, and, like, or, sql } from "drizzle-orm";
 
 // 获取用户的观看历史
-export async function getUserHistory(userId: string, limit = 50) {
+export async function getUserHistory(user_id: string, limit = 50) {
   return await db
     .select()
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.userId, userId))
-    .orderBy(desc(bilibiliHistory.viewTime))
+    .where(eq(bilibiliHistory.user_id, user_id))
+    .orderBy(desc(bilibiliHistory.view_at))
     .limit(limit);
 }
 
@@ -27,8 +27,8 @@ export async function getUserHistoryWithPagination(
   return await db
     .select()
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.userId, userId))
-    .orderBy(desc(bilibiliHistory.viewTime))
+    .where(eq(bilibiliHistory.user_id, userId))
+    .orderBy(desc(bilibiliHistory.view_at))
     .limit(pageSize)
     .offset(offset);
 }
@@ -39,7 +39,7 @@ export async function addHistoryRecord(data: NewBilibiliHistory) {
     .insert(bilibiliHistory)
     .values({
       ...data,
-      updatedAt: new Date(),
+      updated_at: new Date(),
     })
     .returning();
 }
@@ -51,7 +51,7 @@ export async function addHistoryRecords(records: NewBilibiliHistory[]) {
     .values(
       records.map((record) => ({
         ...record,
-        updatedAt: new Date(),
+        updated_at: new Date(),
       }))
     )
     .returning();
@@ -63,23 +63,23 @@ export async function upsertHistoryRecord(data: NewBilibiliHistory) {
     .insert(bilibiliHistory)
     .values({
       ...data,
-      updatedAt: new Date(),
+      updated_at: new Date(),
     })
     .onConflictDoUpdate({
-      target: [bilibiliHistory.id, bilibiliHistory.userId],
+      target: [bilibiliHistory.id, bilibiliHistory.user_id],
       set: {
         business: sql.raw(`excluded.business`),
         bvid: sql.raw(`excluded.bvid`),
         cid: sql.raw(`excluded.cid`),
         title: sql.raw(`excluded.title`),
-        tagName: sql.raw(`excluded.tag_name`),
+        tag_name: sql.raw(`excluded.tag_name`),
         cover: sql.raw(`excluded.cover`),
-        viewTime: sql.raw(`excluded.view_time`),
+        view_at: sql.raw(`excluded.view_at`),
         uri: sql.raw(`excluded.uri`),
-        authorName: sql.raw(`excluded.author_name`),
-        authorMid: sql.raw(`excluded.author_mid`),
+        author_name: sql.raw(`excluded.author_name`),
+        author_mid: sql.raw(`excluded.author_mid`),
         timestamp: sql.raw(`excluded.timestamp`),
-        updatedAt: new Date(),
+        updated_at: new Date(),
       },
     })
     .returning();
@@ -98,46 +98,46 @@ export async function upsertHistoryRecords(records: NewBilibiliHistory[]) {
       }))
     )
     .onConflictDoUpdate({
-      target: [bilibiliHistory.id, bilibiliHistory.userId],
+      target: [bilibiliHistory.id, bilibiliHistory.user_id],
       set: {
         business: sql.raw(`excluded.business`),
         bvid: sql.raw(`excluded.bvid`),
         cid: sql.raw(`excluded.cid`),
         title: sql.raw(`excluded.title`),
-        tagName: sql.raw(`excluded.tag_name`),
+        tag_name: sql.raw(`excluded.tag_name`),
         cover: sql.raw(`excluded.cover`),
-        viewTime: sql.raw(`excluded.view_time`),
+        view_at: sql.raw(`excluded.view_at`),
         uri: sql.raw(`excluded.uri`),
-        authorName: sql.raw(`excluded.author_name`),
-        authorMid: sql.raw(`excluded.author_mid`),
+        author_name: sql.raw(`excluded.author_name`),
+        author_mid: sql.raw(`excluded.author_mid`),
         timestamp: sql.raw(`excluded.timestamp`),
-        updatedAt: new Date(),
+        updated_at: new Date(),
       },
     })
     .returning();
 }
 
 // 检查记录是否已存在（使用联合主键）
-export async function checkRecordExists(userId: string, id: number) {
+export async function checkRecordExists(user_id: string, id: number) {
   const result = await db
     .select({ id: bilibiliHistory.id })
     .from(bilibiliHistory)
-    .where(and(eq(bilibiliHistory.userId, userId), eq(bilibiliHistory.id, id)))
+    .where(and(eq(bilibiliHistory.user_id, user_id), eq(bilibiliHistory.id, id)))
     .limit(1);
 
   return result.length > 0;
 }
 
 // 删除历史记录（使用联合主键）
-export async function deleteHistoryRecord(userId: string, id: number) {
+export async function deleteHistoryRecord(user_id: string, id: number) {
   return await db
     .delete(bilibiliHistory)
-    .where(and(eq(bilibiliHistory.id, id), eq(bilibiliHistory.userId, userId)));
+    .where(and(eq(bilibiliHistory.id, id), eq(bilibiliHistory.user_id, user_id)));
 }
 
 // 更新历史记录（使用联合主键）
 export async function updateHistoryRecord(
-  userId: string,
+  user_id: string,
   id: number,
   data: Partial<NewBilibiliHistory>
 ) {
@@ -145,9 +145,9 @@ export async function updateHistoryRecord(
     .update(bilibiliHistory)
     .set({
       ...data,
-      updatedAt: new Date(),
+      updated_at: new Date(),
     })
-    .where(and(eq(bilibiliHistory.userId, userId), eq(bilibiliHistory.id, id)))
+    .where(and(eq(bilibiliHistory.user_id, user_id), eq(bilibiliHistory.id, id)))
     .returning();
 }
 
@@ -158,62 +158,62 @@ export async function searchHistory(userId: string, searchTerm: string) {
     .from(bilibiliHistory)
     .where(
       and(
-        eq(bilibiliHistory.userId, userId),
+        eq(bilibiliHistory.user_id, userId),
         or(
           like(bilibiliHistory.title, `%${searchTerm}%`),
-          like(bilibiliHistory.authorName, `%${searchTerm}%`),
-          like(bilibiliHistory.tagName, `%${searchTerm}%`)
+          like(bilibiliHistory.author_name, `%${searchTerm}%`),
+          like(bilibiliHistory.tag_name, `%${searchTerm}%`)
         )
       )
     )
-    .orderBy(desc(bilibiliHistory.viewTime));
+    .orderBy(desc(bilibiliHistory.view_at));
 }
 
 // 获取用户统计信息
-export async function getUserStats(userId: string) {
+export async function getUserStats(user_id: string) {
   const totalVideos = await db
     .select({ count: sql<number>`count(*)` })
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.userId, userId));
+    .where(eq(bilibiliHistory.user_id, user_id));
 
   const uniqueAuthors = await db
     .select({ count: sql<number>`count(distinct author_name)` })
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.userId, userId));
+    .where(eq(bilibiliHistory.user_id, user_id));
 
   const latestRecord = await db
-    .select({ viewTime: bilibiliHistory.viewTime })
+    .select({ view_at: bilibiliHistory.view_at })
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.userId, userId))
-    .orderBy(desc(bilibiliHistory.viewTime))
+    .where(eq(bilibiliHistory.user_id, user_id))
+    .orderBy(desc(bilibiliHistory.view_at))
     .limit(1);
 
   return {
     totalVideos: totalVideos[0]?.count || 0,
     uniqueAuthors: uniqueAuthors[0]?.count || 0,
-    latestViewTime: latestRecord[0]?.viewTime || 0,
+    latestViewAt: latestRecord[0]?.view_at || 0,
   };
 }
 
 // 按标签分组统计
-export async function getTagStats(userId: string) {
+export async function getTagStats(user_id: string) {
   return await db
     .select({
-      tagName: bilibiliHistory.tagName,
+      tag_name: bilibiliHistory.tag_name,
       count: sql<number>`count(*)`,
     })
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.userId, userId))
-    .groupBy(bilibiliHistory.tagName)
+    .where(eq(bilibiliHistory.user_id, user_id))
+    .groupBy(bilibiliHistory.tag_name)
     .orderBy(desc(sql`count(*)`));
 }
 
 // 获取用户历史记录总数
-export async function getUserHistoryCount(userId: string) {
+export async function getUserHistoryCount(user_id: string) {
   const result = await db
     .select({ count: sql<number>`count(*)` })
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.userId, userId));
+    .where(eq(bilibiliHistory.user_id, user_id));
 
   return result[0]?.count || 0;
 }

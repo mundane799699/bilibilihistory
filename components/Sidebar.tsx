@@ -63,7 +63,7 @@ export default function Sidebar({ className, onCollapseChange }: SidebarProps) {
   return (
     <div
       className={`${className} ${
-        collapsed ? "w-16" : "w-64"
+        collapsed ? "w-16" : "w-40"
       } bg-white shadow-sm border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col`}
     >
       {/* 菜单项 */}

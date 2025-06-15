@@ -1,5 +1,5 @@
 {
-  "id": "34f2398d-6572-4669-bf34-c28c4b730520",
+  "id": "7162f459-ecd5-4c60-9c37-48dc9fbbfaed",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -56,8 +56,8 @@
           "primaryKey": false,
           "notNull": false
         },
-        "view_time": {
-          "name": "view_time",
+        "view_at": {
+          "name": "view_at",
           "type": "bigint",
           "primaryKey": false,
           "notNull": false
@@ -101,7 +101,68 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "title_idx": {
+          "name": "title_idx",
+          "columns": [
+            {
+              "expression": "title",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "view_at_idx": {
+          "name": "view_at_idx",
+          "columns": [
+            {
+              "expression": "view_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "author_name_idx": {
+          "name": "author_name_idx",
+          "columns": [
+            {
+              "expression": "author_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "tag_name_idx": {
+          "name": "tag_name_idx",
+          "columns": [
+            {
+              "expression": "tag_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {
         "bilibili_history_id_user_id_pk": {
