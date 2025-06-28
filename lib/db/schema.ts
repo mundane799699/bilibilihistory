@@ -46,6 +46,44 @@ export const bilibiliHistory = pgTable(
   })
 );
 
+// Auth.js user table
+export const users = pgTable("user", {
+  id: text("id").notNull().primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("emailVerified").notNull(),
+  image: text("image"),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
+});
+
+// VIP会员表
+export const memberships = pgTable(
+  "memberships",
+  {
+    id: serial("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id),
+    email: text("email").notNull().unique(),
+    expiresAt: timestamp("expires_at"),
+    plan: text("plan"), // 'monthly', 'yearly', 'lifetime'
+    status: text("status").notNull().default("active"), // 'active', 'expired', 'cancelled'
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => ({
+    userIdx: index("user_id_idx").on(table.userId),
+    emailIdx: index("email_idx").on(table.email),
+  })
+);
+
 // 导出类型
 export type BilibiliHistory = typeof bilibiliHistory.$inferSelect;
 export type NewBilibiliHistory = typeof bilibiliHistory.$inferInsert;
+
+export type User = typeof users.$inferSelect;
+export type NewUser = typeof users.$inferInsert;
+
+export type Membership = typeof memberships.$inferSelect;
+export type NewMembership = typeof memberships.$inferInsert;
