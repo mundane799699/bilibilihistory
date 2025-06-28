@@ -61,7 +61,7 @@ const formSchema = z.object({
   email: z.string().email("无效的邮箱地址"),
   plan: z.string().optional(),
   status: z.enum(["active", "expired", "cancelled"]).default("active"),
-  expiresAt: z.date().optional().nullable(),
+  expiresAt: z.string().optional().nullable(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -90,10 +90,19 @@ export default function MembershipsManager() {
     handleSubmit,
     reset,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      plan: "monthly",
+      status: "active",
+      expiresAt: null,
+    },
   });
+
+  const status = watch("status");
 
   const fetchMemberships = async () => {
     setIsLoading(true);
@@ -136,12 +145,16 @@ export default function MembershipsManager() {
   };
 
   const onSubmit = async (data: FormData) => {
+    console.log("onSubmit", data);
     const apiEndpoint = editingMembership
       ? `/api/memberships/${editingMembership.id}`
       : "/api/memberships";
     const method = editingMembership ? "PUT" : "POST";
 
-    const payload = { ...data, expiresAt: data.expiresAt?.toISOString() };
+    const payload = {
+      ...data,
+      expiresAt: data.expiresAt ? new Date(data.expiresAt).toISOString() : null,
+    };
 
     try {
       const response = await fetch(apiEndpoint, {
@@ -170,11 +183,15 @@ export default function MembershipsManager() {
   const openDialog = (membership: MembershipWithUser | null = null) => {
     setEditingMembership(membership);
     if (membership) {
-      const resetValues: any = {
-        ...membership,
-        expiresAt: membership.expiresAt ? new Date(membership.expiresAt) : null,
+      const formValues: FormData = {
+        email: membership.email,
+        plan: membership.plan || "",
+        status: membership.status as "active" | "expired" | "cancelled",
+        expiresAt: membership.expiresAt
+          ? format(new Date(membership.expiresAt), "yyyy-MM-dd")
+          : null,
       };
-      reset(resetValues);
+      reset(formValues);
     } else {
       reset({
         email: "",
@@ -395,8 +412,8 @@ export default function MembershipsManager() {
             <div>
               <Label htmlFor="status">状态</Label>
               <Select
+                value={status}
                 onValueChange={(value) => setValue("status", value as any)}
-                defaultValue={editingMembership?.status || "active"}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="选择状态" />
@@ -410,13 +427,7 @@ export default function MembershipsManager() {
             </div>
             <div>
               <Label htmlFor="expiresAt">到期日</Label>
-              <Input
-                type="date"
-                id="expiresAt"
-                {...register("expiresAt", {
-                  setValueAs: (value) => (value ? new Date(value) : null),
-                })}
-              />
+              <Input type="date" id="expiresAt" {...register("expiresAt")} />
             </div>
             <DialogFooter>
               <DialogClose asChild>

@@ -9,6 +9,7 @@ import {
   deleteHistoryRecord,
 } from "@/lib/db/queries";
 import { headers } from "next/headers";
+import { getMembershipByUserId } from "@/lib/db/membership_queries";
 
 // 获取历史记录
 export async function GET(request: NextRequest) {
@@ -99,10 +100,25 @@ export async function POST(request: NextRequest) {
     const currentCount = await getUserHistoryCount(session.user.id);
     console.log("currentCount = ", currentCount);
     if (currentCount >= 500) {
-      return NextResponse.json({
-        success: false,
-        message: "目前免费用户最多可以上传500条历史记录",
-      });
+      const membership = await getMembershipByUserId(session.user.id);
+
+      // 如果没有会员记录
+      if (!membership) {
+        return NextResponse.json({
+          success: false,
+          message: "免费用户最多可以上传500条历史记录",
+        });
+      }
+
+      // 如果会员记录已过期或状态不是 active
+      const isExpired =
+        membership.expiresAt && new Date(membership.expiresAt) < new Date();
+      if (membership.status !== "active" || isExpired) {
+        return NextResponse.json({
+          success: false,
+          message: "您的会员已过期，无法上传更多记录",
+        });
+      }
     }
 
     // 数据清理：将空字符串转换为null，避免bigint类型转换错误

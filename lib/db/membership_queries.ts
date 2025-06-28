@@ -81,6 +81,16 @@ export async function getMembershipsCount({
   return result[0]?.count ?? 0;
 }
 
+// 根据用户ID获取会员信息
+export async function getMembershipByUserId(userId: string) {
+  const result = await db
+    .select()
+    .from(memberships)
+    .where(eq(memberships.userId, userId))
+    .limit(1);
+  return result[0];
+}
+
 // 通过 email 查找用户
 export async function findUserByEmail(email: string) {
   const result = await db
