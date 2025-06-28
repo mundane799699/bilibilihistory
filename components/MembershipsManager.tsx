@@ -75,6 +75,7 @@ export default function MembershipsManager() {
     totalPages: 1,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -157,6 +158,7 @@ export default function MembershipsManager() {
     };
 
     try {
+      setIsSubmitting(true);
       const response = await fetch(apiEndpoint, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -177,6 +179,8 @@ export default function MembershipsManager() {
       fetchMemberships(); // Refresh data
     } catch (err: any) {
       toast.error(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -435,7 +439,9 @@ export default function MembershipsManager() {
                   取消
                 </Button>
               </DialogClose>
-              <Button type="submit">保存</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "保存中..." : "保存"}
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
