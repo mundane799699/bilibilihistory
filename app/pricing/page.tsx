@@ -149,6 +149,27 @@ export default function PricingPage() {
             感谢您的理解与支持。
           </p>
         </div>
+
+        <div className="mt-16 ">
+          <h2 className="text-center text-3xl font-bold tracking-tight">
+            对定价有建议？
+          </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+            欢迎提出您的建议，作者将根据您的建议调整定价。
+          </p>
+          <div className="flex flex-col items-center justify-center mt-8">
+            <Image
+              src="/images/wechat-qrcode.png"
+              alt="wechat qrcode"
+              width={250}
+              height={250}
+              className="rounded-md"
+            />
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              扫码添加微信，向我提出您的建议
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
