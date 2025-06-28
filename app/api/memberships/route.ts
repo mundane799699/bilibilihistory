@@ -19,13 +19,13 @@ const membershipSchema = z.object({
 // 获取会员列表
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    // const session = await auth.api.getSession({
+    //   headers: await headers(),
+    // });
 
-    if (!session) {
-      return NextResponse.json({ error: "未授权" }, { status: 401 });
-    }
+    // if (!session) {
+    //   return NextResponse.json({ error: "未授权" }, { status: 401 });
+    // }
     // TODO: 增加管理员角色校验
     // if (session.user.role !== 'admin') {
     //   return NextResponse.json({ error: "无权限访问" }, { status: 403 });
@@ -64,13 +64,13 @@ export async function GET(request: NextRequest) {
 // 创建新会员
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    // const session = await auth.api.getSession({
+    //   headers: await headers(),
+    // });
 
-    if (!session) {
-      return NextResponse.json({ error: "未授权" }, { status: 401 });
-    }
+    // if (!session) {
+    //   return NextResponse.json({ error: "未授权" }, { status: 401 });
+    // }
     // TODO: 增加管理员角色校验
 
     const body = await request.json();

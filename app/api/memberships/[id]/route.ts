@@ -21,10 +21,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) {
-      return NextResponse.json({ error: "未授权" }, { status: 401 });
-    }
+    // const session = await auth.api.getSession({ headers: await headers() });
+    // if (!session) {
+    //   return NextResponse.json({ error: "未授权" }, { status: 401 });
+    // }
     // TODO: 增加管理员角色校验
 
     const id = parseInt(params.id);
@@ -50,10 +50,10 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) {
-      return NextResponse.json({ error: "未授权" }, { status: 401 });
-    }
+    // const session = await auth.api.getSession({ headers: await headers() });
+    // if (!session) {
+    //   return NextResponse.json({ error: "未授权" }, { status: 401 });
+    // }
     // TODO: 增加管理员角色校验
 
     const id = parseInt(params.id);
@@ -103,10 +103,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth.api.getSession({ headers: await headers() });
-    if (!session) {
-      return NextResponse.json({ error: "未授权" }, { status: 401 });
-    }
+    // const session = await auth.api.getSession({ headers: await headers() });
+    // if (!session) {
+    //   return NextResponse.json({ error: "未授权" }, { status: 401 });
+    // }
     // TODO: 增加管理员角色校验
 
     const id = parseInt(params.id);
