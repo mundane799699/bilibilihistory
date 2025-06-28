@@ -11,6 +11,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  DollarSign,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -20,24 +21,34 @@ interface SidebarProps {
 
 const menuItems = [
   {
+    openInNewTab: false,
     name: "历史记录",
     href: "/dashboard",
     icon: Clock,
   },
   {
+    openInNewTab: false,
     name: "收藏",
     href: "/dashboard/favorites",
     icon: Heart,
   },
   {
+    openInNewTab: false,
     name: "个人中心",
     href: "/dashboard/profile",
     icon: User,
   },
   {
+    openInNewTab: false,
     name: "设置",
     href: "/dashboard/settings",
     icon: Settings,
+  },
+  {
+    openInNewTab: true,
+    name: "会员定价",
+    href: "/pricing",
+    icon: DollarSign,
   },
 ];
 
@@ -46,8 +57,12 @@ export default function Sidebar({ className, onCollapseChange }: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleNavigation = (href: string) => {
-    router.push(href);
+  const handleNavigation = (item: { href: string; openInNewTab: boolean }) => {
+    if (item.openInNewTab) {
+      window.open(item.href, "_blank");
+    } else {
+      router.push(item.href);
+    }
   };
 
   const handleToggleCollapse = () => {
@@ -75,7 +90,7 @@ export default function Sidebar({ className, onCollapseChange }: SidebarProps) {
           return (
             <button
               key={item.name}
-              onClick={() => handleNavigation(item.href)}
+              onClick={() => handleNavigation(item)}
               className={`w-full flex items-center ${
                 collapsed ? "justify-center" : "justify-start"
               } px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${

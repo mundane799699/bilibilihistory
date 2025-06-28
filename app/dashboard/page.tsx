@@ -29,7 +29,7 @@ export default function DashboardPage() {
   const [debouncedAuthorKeyword] = useDebounce(authorKeyword, 500);
   const [date, setDate] = useState("");
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const isLoadingRef = useRef<boolean>(false);
 
