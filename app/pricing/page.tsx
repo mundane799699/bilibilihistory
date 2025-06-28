@@ -12,9 +12,18 @@ import {
 } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Image from "next/image";
 
 export default function PricingPage() {
   const router = useRouter();
+
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <nav className="bg-white shadow-sm sticky top-0 z-50 w-full">
@@ -82,27 +91,63 @@ export default function PricingPage() {
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
                   <span>
-                    <strong>无限上传历史记录</strong>
+                    <strong>无限上传历史记录到服务器，实现多设备查看</strong>
                   </span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
                   <span>
-                    <strong>加入VIP用户群</strong>
+                    <strong>加入VIP用户群, 提出的需求优先响应</strong>
                   </span>
                 </li>
                 <li className="flex items-start">
                   <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
                   <span>
-                    <strong>VIP用户提出的需求优先响应</strong>
+                    <strong>收藏管理、视频备份等更多功能正在开发中...</strong>
                   </span>
                 </li>
               </ul>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">升级到会员</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full">升级到会员</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>联系我开通会员</DialogTitle>
+                  </DialogHeader>
+                  <div className="flex flex-col items-center justify-center p-4">
+                    <Image
+                      src="/images/wechat-qrcode.png"
+                      alt="wechat qrcode"
+                      width={250}
+                      height={250}
+                      className="rounded-md"
+                    />
+                    <p className="mt-4 text-center text-sm text-muted-foreground">
+                      添加微信，付款，作者将手动为您开通会员。
+                    </p>
+                    <p className="font-bold mt-4 text-center text-base text-muted-foreground">
+                      加好友时请备注“开通会员”
+                    </p>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </CardFooter>
           </Card>
+        </div>
+
+        <div className="mt-16 ">
+          <h2 className="text-center text-3xl font-bold tracking-tight">
+            为什么要收费？
+          </h2>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+            我们收费是为了能够覆盖服务器、数据库等基础设施的成本，并投入更多的时间和精力来维护和开发新功能，从而为您提供更稳定、更优质的服务。
+          </p>
+          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
+            感谢您的理解与支持。
+          </p>
         </div>
       </div>
     </div>
