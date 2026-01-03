@@ -265,7 +265,7 @@ export default function Home() {
 
               {/* 离线压缩包 */}
               <Link
-                href="https://cdn.dreamfree.xyz/bilibilihistory/bilibili-unlimited-history-1.8.0-chrome.zip"
+                href="https://cdn.dreamfree.xyz/bilibilihistory/bilibili-unlimited-history-1.8.8-chrome.zip"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
