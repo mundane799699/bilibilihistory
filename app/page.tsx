@@ -262,10 +262,17 @@ export default function Home() {
                   Firefox
                 </span>
               </Link>
+            </div>
+          </div>
 
+          <div className="flex flex-col items-center mt-8">
+            <h3 className="text-lg font-medium mb-8 text-slate-600">
+              离线压缩包
+            </h3>
+            <div className="flex flex-wrap justify-center items-center gap-8">
               {/* 离线压缩包 */}
               <Link
-                href="https://cdn.dreamfree.xyz/bilibilihistory/bilibili-unlimited-history-1.8.8-chrome.zip"
+                href="https://cdn.dreamfree.xyz/bilibilihistory/bilibili-unlimited-history-1.9.1-chrome.zip"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
@@ -274,7 +281,21 @@ export default function Home() {
                   <Download className="w-12 h-12 text-[#00a1d6]" />
                 </div>
                 <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">
-                  离线压缩包
+                  chrome、edge
+                </span>
+              </Link>
+
+              <Link
+                href="https://cdn.dreamfree.xyz/bilibilihistory/bilibili-unlimited-history-1.9.1-firefox.zip"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center p-8 bg-white/70 backdrop-blur-sm border border-blue-100/50 rounded-2xl hover:bg-white/90 hover:border-[#00a1d6]/40 hover:shadow-xl transition-all duration-300 hover:scale-105 min-w-[160px]"
+              >
+                <div className="w-14 h-14 mb-5 flex items-center justify-center">
+                  <Download className="w-12 h-12 text-[#00a1d6]" />
+                </div>
+                <span className="text-slate-700 font-medium text-sm group-hover:text-[#00a1d6] transition-colors">
+                  firefox
                 </span>
               </Link>
             </div>
