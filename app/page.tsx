@@ -4,18 +4,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Download,
-  Clock,
-  Search,
-  RefreshCw,
-  Lock,
-  FileDown,
-  BookOpen,
-  Lightbulb,
-  History,
-  Share2,
   User,
-  FileText,
-  MessageSquare,
+  BookMarked,
+  BadgePercent,
+  Send,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useEffect, useState } from "react";
@@ -41,64 +33,48 @@ export default function Home() {
   // 定义功能卡片数据
   const features = [
     {
-      icon: <Clock className="h-6 w-6" />,
-      title: "真正无限记录",
-      description:
-        "彻底突破官方数量限制，永久保存所有B站观看历史，不再有遗漏。",
+      title: "无限记录",
+      description: "突破官方限制，永久保存所有观看历史",
     },
     {
-      icon: <History className="h-6 w-6" />,
-      title: "智能时间回溯",
-      description: "按观看时间精确排序，轻松回顾当年今日在看什么视频内容。",
+      title: "时间回溯",
+      description: "按时间排序，轻松回顾任意时段的观看内容",
     },
     {
-      icon: <Search className="h-6 w-6" />,
-      title: "精准标题搜索",
-      description: "输入关键词，快速定位任何历史视频，忘记UP主也不怕找不到。",
+      title: "快速搜索",
+      description: "关键词搜索，秒速定位想找的视频",
     },
     {
-      icon: <RefreshCw className="h-6 w-6" />,
-      title: "自动增量同步",
-      description:
-        "每分钟自动同步最新历史，默默守护，省心省力，不错过任何记录。",
+      title: "自动同步",
+      description: "后台自动同步，无需手动操作",
     },
     {
-      icon: <Lock className="h-6 w-6" />,
-      title: "本地安全存储",
-      description: "数据存储在本地IndexedDB，隐私至上，安全有保障。",
+      title: "本地存储",
+      description: "数据存本地，隐私安全有保障",
     },
     {
-      icon: <FileDown className="h-6 w-6" />,
-      title: "CSV 格式导出",
-      description: "轻松将历史记录导出为CSV文件，方便备份或进行二次数据分析。",
+      title: "导出备份",
+      description: "支持CSV导出，方便备份和分析",
     },
   ];
 
   // 定义应用场景数据
   const useCases = [
     {
-      icon: <BookOpen className="h-7 w-7 text-[#00a1d6]" />,
-      title: "学习与知识回顾 📚",
-      description:
-        "快速找回教程、科普视频，巩固学习成果。再也不用担心找不到之前看过的学习资源。",
+      title: "找回学习资料",
+      description: "之前看的教程、科普视频，随时能找回来",
     },
     {
-      icon: <Lightbulb className="h-7 w-7 text-[#00a1d6]" />,
-      title: "灵感与素材追溯 💡",
-      description:
-        "不再让一闪而过的灵感和素材溜走。随时回顾那些激发你创意的精彩内容，让灵感常驻。",
+      title: "追溯创作灵感",
+      description: "那个激发灵感的视频，再也不会弄丢",
     },
     {
-      icon: <History className="h-7 w-7 text-[#00a1d6]" />,
-      title: "怀旧与考古乐趣 ⏳",
-      description:
-        "化身B站考古学家，发现被遗忘的宝藏。重温那些年你看过的经典视频，找回美好回忆。",
+      title: "重温经典内容",
+      description: "多年前的宝藏视频，想看就能找到",
     },
     {
-      icon: <Share2 className="h-7 w-7 text-[#00a1d6]" />,
-      title: "日常查找与分享 🗣️",
-      description:
-        "快速定位视频，即时分享，不再尴尬。当朋友问起你之前推荐的那个视频是哪个？立刻找到！",
+      title: "快速分享推荐",
+      description: "朋友问起那个视频，立刻就能分享",
     },
   ];
 
@@ -107,18 +83,17 @@ export default function Home() {
     {
       number: 1,
       title: "安装扩展",
-      description:
-        "从Chrome商店或Edge商店下载并安装Bilibili 无限历史记录扩展。",
+      description: "从浏览器商店安装插件",
     },
     {
       number: 2,
       title: "登录B站",
-      description: "确保你已登录哔哩哔哩网站，扩展将自动开始工作。",
+      description: "登录后自动开始同步",
     },
     {
       number: 3,
-      title: "尽情使用",
-      description: "点击扩展图标，即可查看、搜索和导出你的完整历史记录！",
+      title: "开始使用",
+      description: "查看、搜索、导出历史记录",
     },
   ];
 
@@ -142,19 +117,26 @@ export default function Home() {
               href="https://v3oxu28gnc.feishu.cn/docx/MZp8dCXd1otO9oxevQUcIlxFnPg?from=from_copylink"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-1 text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+              className="flex items-center space-x-1.5 text-gray-600 hover:text-[#00a1d6] font-medium transition-colors"
             >
-              <FileText className="h-4 w-4" />
+              <BookMarked className="h-4 w-4" />
               <span>文档</span>
+            </Link>
+            <Link
+              href="/pricing"
+              className="flex items-center space-x-1.5 text-gray-600 hover:text-[#00a1d6] font-medium transition-colors"
+            >
+              <BadgePercent className="h-4 w-4" />
+              <span>价格</span>
             </Link>
             <Link
               href="https://c1p0xw7om7n.feishu.cn/share/base/form/shrcneS0t8RdC3byY9xC5ftQgub"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-1 text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+              className="flex items-center space-x-1.5 text-gray-600 hover:text-[#00a1d6] font-medium transition-colors"
             >
-              <MessageSquare className="h-4 w-4" />
-              <span>提交建议</span>
+              <Send className="h-4 w-4" />
+              <span>反馈</span>
             </Link>
 
             {/* 根据登录状态显示不同内容 */}
@@ -304,148 +286,233 @@ export default function Home() {
       </header>
 
       {/* 问题区域 */}
-      <section className="py-16 sm:py-20 px-6">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-12">
+      <section className="py-16 sm:py-20 px-6 bg-gray-50">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
-              还在为这些烦恼吗？
+              你是否也遇到过这些问题？
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              官方记录上限、想不起的教程UP主、找不到的追番系列...
-              那些B站瞬间，不应轻易消失。
+            <p className="text-gray-600">
+              B站官方只保留有限的历史记录，那些精彩内容可能随时消失
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 sm:gap-10">
-            <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-              <div className="bg-[#b3e5fc]/20 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                <Search className="h-8 w-8 text-[#00a1d6]" />
-              </div>
-              <h3 className="font-semibold text-xl mb-3 text-gray-800">
-                教程找不回
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="font-semibold text-lg mb-2 text-gray-800">
+                想重看的教程找不到了
               </h3>
-              <p className="text-gray-600">
-                "上月看的烹饪教程是哪个UP主？找了好久都找不到..."
+              <p className="text-gray-500 text-sm">
+                之前看的那个讲得很好的教程，怎么也搜不到了
               </p>
             </div>
-            <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-              <div className="bg-[#b3e5fc]/20 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                <Clock className="h-8 w-8 text-[#00a1d6]" />
-              </div>
-              <h3 className="font-semibold text-xl mb-3 text-gray-800">
-                系列追番难
+            <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="font-semibold text-lg mb-2 text-gray-800">
+                追的系列视频断了
               </h3>
-              <p className="text-gray-600">
-                "去年追的系列视频想重温，但历史记录早就刷没了..."
+              <p className="text-gray-500 text-sm">
+                追到一半的系列，历史记录被覆盖，不知道看到哪了
               </p>
             </div>
-            <div className="bg-white p-8 rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-              <div className="bg-[#b3e5fc]/20 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                <RefreshCw className="h-8 w-8 text-[#00a1d6]" />
-              </div>
-              <h3 className="font-semibold text-xl mb-3 text-gray-800">
-                知识点遗忘
+            <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <h3 className="font-semibold text-lg mb-2 text-gray-800">
+                宝藏视频再也找不回
               </h3>
-              <p className="text-gray-600">
-                "看过讲这知识点的视频搜不到？记不清关键词怎么办..."
+              <p className="text-gray-500 text-sm">
+                记得看过但想不起关键词，官方记录早就没了
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 功能区域 */}
-      <section className="py-16 sm:py-20 px-6 bg-white">
-        <div className="container mx-auto max-w-5xl">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
-              ✨ 【Bilibili 无限历史记录】为你而来！
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              专为B站爱好者打造的终极历史记录解决方案，让每一次观看都有迹可循。
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-white p-6 rounded-xl border border-gray-100 shadow-md hover:shadow-lg transition-all duration-300 hover:border-[#00a1d6]/20"
-              >
-                <div className="flex items-center text-[#00a1d6] mb-4">
-                  <div className="bg-[#b3e5fc]/30 w-12 h-12 rounded-lg flex items-center justify-center">
-                    {feature.icon}
-                  </div>
-                  <h3 className="ml-4 text-xl font-semibold text-gray-800">
-                    {feature.title}
-                  </h3>
-                </div>
-                <p className="text-gray-600 ml-16">{feature.description}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
       {/* 应用场景 */}
-      <section className="py-16 sm:py-20 px-6 bg-gray-50">
-        <div className="container mx-auto max-w-5xl">
+      <section className="py-16 sm:py-20 px-6 bg-white">
+        <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
-              满足你的多样需求
+              适用场景
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              无论学习、娱乐还是工作，都能让你的B站体验更加完整
+            <p className="text-gray-600">
+              无论学习、创作还是日常，都能派上用场
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {useCases.map((useCase, index) => (
               <div
                 key={index}
-                className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-start hover:-translate-y-1"
+                className="bg-gray-50 p-5 rounded-xl text-center hover:bg-[#00a1d6]/5 transition-colors"
               >
-                <div className="bg-[#b3e5fc]/30 w-16 h-16 rounded-lg flex items-center justify-center flex-shrink-0">
-                  {useCase.icon}
-                </div>
-                <div className="ml-6">
-                  <h3 className="font-semibold text-xl mb-3 text-gray-800">
-                    {useCase.title}
-                  </h3>
-                  <p className="text-gray-600">{useCase.description}</p>
-                </div>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  {useCase.title}
+                </h3>
+                <p className="text-gray-500 text-sm">{useCase.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 功能区域 */}
+      <section className="py-16 sm:py-20 px-6 bg-gray-50">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
+              核心功能
+            </h2>
+            <p className="text-gray-600">
+              专为B站用户打造，让每一次观看都有迹可循
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-white p-5 rounded-xl hover:shadow-md transition-shadow"
+              >
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-500 text-sm">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 定价区域 */}
+      <section className="py-16 sm:py-20 px-6 bg-white">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
+              定价方案
+            </h2>
+            <p className="text-gray-600">
+              简单透明，选择适合你的方案
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* 免费版 */}
+            <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col">
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">免费版</h3>
+              <p className="text-gray-500 text-sm mb-4">基础功能</p>
+              <div className="text-3xl font-bold text-gray-800 mb-4">¥0</div>
+              <ul className="text-sm text-gray-600 space-y-2 flex-grow">
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  无限同步历史记录到本地
+                </li>
+              </ul>
+              <Link
+                href="/pricing"
+                className="mt-6 block text-center py-2 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+              >
+                免费使用
+              </Link>
+            </div>
+
+            {/* 月会员 */}
+            <div className="bg-white p-6 rounded-xl shadow-md border-2 border-[#00a1d6] relative flex flex-col">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00a1d6] text-white text-xs px-3 py-1 rounded-full">
+                推荐
+              </span>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">月会员</h3>
+              <p className="text-gray-500 text-sm mb-4">全部功能</p>
+              <div className="flex items-baseline mb-4">
+                <span className="text-3xl font-bold text-gray-800">¥9.9</span>
+                <span className="text-gray-400 line-through ml-2">¥12</span>
+                <span className="text-gray-500 ml-1">/月</span>
+              </div>
+              <ul className="text-sm text-gray-600 space-y-2 flex-grow">
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  无限同步历史记录到本地
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  上传到服务器，多设备查看
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  加入VIP群，需求优先响应
+                </li>
+              </ul>
+              <Link
+                href="/pricing"
+                className="mt-6 block text-center py-2 px-4 bg-[#00a1d6] text-white rounded-lg hover:bg-[#0076a8] transition-colors text-sm font-medium"
+              >
+                立即开通
+              </Link>
+            </div>
+
+            {/* 年会员 */}
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-green-200 relative flex flex-col">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs px-3 py-1 rounded-full">
+                最划算
+              </span>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">年会员</h3>
+              <p className="text-gray-500 text-sm mb-4">全部功能</p>
+              <div className="flex items-baseline mb-1">
+                <span className="text-3xl font-bold text-gray-800">¥99</span>
+                <span className="text-gray-400 line-through ml-2">¥118.8</span>
+                <span className="text-gray-500 ml-1">/年</span>
+              </div>
+              <p className="text-green-600 text-xs mb-4">相当于 ¥8.25/月，省17%</p>
+              <ul className="text-sm text-gray-600 space-y-2 flex-grow">
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  无限同步历史记录到本地
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  上传到服务器，多设备查看
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-500 mr-2">✓</span>
+                  加入VIP群，需求优先响应
+                </li>
+              </ul>
+              <Link
+                href="/pricing"
+                className="mt-6 block text-center py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium"
+              >
+                立即开通
+              </Link>
+            </div>
+          </div>
+          <div className="text-center mt-8">
+            <Link
+              href="/pricing"
+              className="text-[#00a1d6] hover:underline text-sm"
+            >
+              查看完整定价详情 →
+            </Link>
           </div>
         </div>
       </section>
 
       {/* 使用步骤 */}
       <section className="py-16 sm:py-20 px-6 bg-gradient-to-b from-blue-50 to-white">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-12">
+        <div className="container mx-auto max-w-3xl">
+          <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
-              📝 三步开启无限之旅
+              三步开始使用
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              简单快捷，立即体验无限历史记录的便利
-            </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* 连接线 (仅在md屏幕及以上显示) */}
-            <div className="hidden md:block absolute top-24 left-[25%] w-[50%] h-0.5 bg-[#00a1d6]/20"></div>
-
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
             {steps.map((step, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center text-center p-4 relative"
-              >
-                <div className="bg-[#b3e5fc]/30 w-20 h-20 rounded-full flex items-center justify-center mb-6 shadow-md relative z-10">
-                  <div className="bg-[#00a1d6] w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+              <div key={index} className="flex items-center">
+                <div className="flex flex-col items-center text-center">
+                  <div className="bg-[#00a1d6] w-10 h-10 rounded-full flex items-center justify-center text-white font-bold mb-3">
                     {step.number}
                   </div>
+                  <h3 className="font-semibold text-gray-800 mb-1">
+                    {step.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm">{step.description}</p>
                 </div>
-                <h3 className="font-semibold text-xl mb-3 text-gray-800">
-                  {step.title}
-                </h3>
-                <p className="text-gray-600">{step.description}</p>
+                {index < steps.length - 1 && (
+                  <div className="hidden md:block w-12 h-0.5 bg-gray-200 mx-4"></div>
+                )}
               </div>
             ))}
           </div>
@@ -453,25 +520,22 @@ export default function Home() {
       </section>
 
       {/* 页脚 */}
-      <footer className="bg-gray-800 text-white py-12 px-6">
-        <div className="container mx-auto max-w-5xl">
+      <footer className="bg-gray-800 text-white py-10 px-6">
+        <div className="container mx-auto max-w-4xl">
           <div className="text-center">
-            <h2 className="text-2xl font-bold mb-6">Bilibili 无限历史记录</h2>
-            <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-              让每一次B站观看都被永久珍藏，打造你的专属时光机。
-            </p>
-            <div className="text-center mb-8">
-              <h3 className="text-xl font-medium mb-4">扫码加入用户群</h3>
+            <h2 className="text-xl font-bold mb-4">Bilibili 无限历史记录</h2>
+            <div className="mb-6">
+              <p className="text-gray-400 text-sm mb-3">扫码加入用户群</p>
               <div className="flex justify-center">
                 <img
                   src="/images/wechat-qrcode.png"
                   alt="微信用户群二维码"
-                  className="w-48 h-48 bg-white p-2 rounded-md shadow-md"
+                  className="w-36 h-36 bg-white p-1.5 rounded-md"
                 />
               </div>
             </div>
             <div className="text-sm text-gray-500">
-              © 2024 Bilibili 无限历史记录 丨你的专属时光机
+              © 2024 Bilibili 无限历史记录
             </div>
           </div>
         </div>
