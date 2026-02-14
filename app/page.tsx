@@ -8,6 +8,9 @@ import {
   BookMarked,
   BadgePercent,
   Send,
+  ShieldCheck,
+  Menu,
+  X,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useEffect, useState } from "react";
@@ -15,6 +18,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [user, setUser] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const getSession = async () => {
@@ -112,7 +116,9 @@ export default function Home() {
               Bilibili 无限历史记录
             </span>
           </div>
-          <div className="flex items-center space-x-6">
+
+          {/* 桌面端导航 */}
+          <div className="hidden md:flex items-center space-x-6">
             <Link
               href="https://v3oxu28gnc.feishu.cn/docx/MZp8dCXd1otO9oxevQUcIlxFnPg?from=from_copylink"
               target="_blank"
@@ -130,20 +136,24 @@ export default function Home() {
               <span>价格</span>
             </Link>
             <Link
-              href="https://c1p0xw7om7n.feishu.cn/share/base/form/shrcneS0t8RdC3byY9xC5ftQgub"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#footer"
               className="flex items-center space-x-1.5 text-gray-600 hover:text-[#00a1d6] font-medium transition-colors"
             >
               <Send className="h-4 w-4" />
               <span>反馈</span>
+            </Link>
+            <Link
+              href="/privacy"
+              className="flex items-center space-x-1.5 text-gray-600 hover:text-[#00a1d6] font-medium transition-colors"
+            >
+              <ShieldCheck className="h-4 w-4" />
+              <span>隐私政策</span>
             </Link>
 
             {/* 根据登录状态显示不同内容 */}
             {isLoading ? (
               <div className="text-gray-500">加载中...</div>
             ) : user ? (
-              // 已登录状态 - 显示用户名和跳转到仪表板
               <Link
                 href="/dashboard"
                 className="flex items-center space-x-2 bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
@@ -152,18 +162,88 @@ export default function Home() {
                 <span>{user.name}</span>
               </Link>
             ) : (
-              // 未登录状态 - 显示登录和注册按钮
-              <>
-                <Link
-                  href="/login"
-                  className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
-                >
-                  登录
-                </Link>
-              </>
+              <Link
+                href="/login"
+                className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
+              >
+                登录
+              </Link>
             )}
           </div>
+
+          {/* 移动端：登录按钮 + 汉堡菜单 */}
+          <div className="flex md:hidden items-center space-x-3">
+            {isLoading ? null : user ? (
+              <Link
+                href="/dashboard"
+                className="flex items-center space-x-1.5 bg-[#00a1d6] hover:bg-[#0076a8] text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+              >
+                <User className="h-4 w-4" />
+                <span>{user.name}</span>
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
+              >
+                登录
+              </Link>
+            )}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-gray-600 hover:text-[#00a1d6] transition-colors"
+              aria-label="切换菜单"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* 移动端下拉菜单 */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-100 bg-white">
+            <div className="container mx-auto px-4 py-3 flex flex-col space-y-1">
+              <Link
+                href="https://v3oxu28gnc.feishu.cn/docx/MZp8dCXd1otO9oxevQUcIlxFnPg?from=from_copylink"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-gray-600 hover:text-[#00a1d6] hover:bg-gray-50 font-medium transition-colors px-3 py-2.5 rounded-lg"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <BookMarked className="h-4 w-4" />
+                <span>文档</span>
+              </Link>
+              <Link
+                href="/pricing"
+                className="flex items-center space-x-2 text-gray-600 hover:text-[#00a1d6] hover:bg-gray-50 font-medium transition-colors px-3 py-2.5 rounded-lg"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <BadgePercent className="h-4 w-4" />
+                <span>价格</span>
+              </Link>
+              <Link
+                href="#footer"
+                className="flex items-center space-x-2 text-gray-600 hover:text-[#00a1d6] hover:bg-gray-50 font-medium transition-colors px-3 py-2.5 rounded-lg"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <Send className="h-4 w-4" />
+                <span>反馈</span>
+              </Link>
+              <Link
+                href="/privacy"
+                className="flex items-center space-x-2 text-gray-600 hover:text-[#00a1d6] hover:bg-gray-50 font-medium transition-colors px-3 py-2.5 rounded-lg"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <ShieldCheck className="h-4 w-4" />
+                <span>隐私政策</span>
+              </Link>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* 英雄区域 */}
@@ -386,14 +466,14 @@ export default function Home() {
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-800">
               定价方案
             </h2>
-            <p className="text-gray-600">
-              简单透明，选择适合你的方案
-            </p>
+            <p className="text-gray-600">简单透明，选择适合你的方案</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {/* 免费版 */}
             <div className="bg-white p-6 rounded-xl shadow-sm flex flex-col">
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">免费版</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                免费版
+              </h3>
               <p className="text-gray-500 text-sm mb-4">基础功能</p>
               <div className="text-3xl font-bold text-gray-800 mb-4">¥0</div>
               <ul className="text-sm text-gray-600 space-y-2 flex-grow">
@@ -415,7 +495,9 @@ export default function Home() {
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00a1d6] text-white text-xs px-3 py-1 rounded-full">
                 推荐
               </span>
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">月会员</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                月会员
+              </h3>
               <p className="text-gray-500 text-sm mb-4">全部功能</p>
               <div className="flex items-baseline mb-4">
                 <span className="text-3xl font-bold text-gray-800">¥9.9</span>
@@ -449,14 +531,18 @@ export default function Home() {
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-500 text-white text-xs px-3 py-1 rounded-full">
                 最划算
               </span>
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">年会员</h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                年会员
+              </h3>
               <p className="text-gray-500 text-sm mb-4">全部功能</p>
               <div className="flex items-baseline mb-1">
                 <span className="text-3xl font-bold text-gray-800">¥99</span>
                 <span className="text-gray-400 line-through ml-2">¥118.8</span>
                 <span className="text-gray-500 ml-1">/年</span>
               </div>
-              <p className="text-green-600 text-xs mb-4">相当于 ¥8.25/月，省17%</p>
+              <p className="text-green-600 text-xs mb-4">
+                相当于 ¥8.25/月，省17%
+              </p>
               <ul className="text-sm text-gray-600 space-y-2 flex-grow">
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
@@ -520,7 +606,7 @@ export default function Home() {
       </section>
 
       {/* 页脚 */}
-      <footer className="bg-gray-800 text-white py-10 px-6">
+      <footer id="footer" className="bg-gray-800 text-white py-40 px-6">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center">
             <h2 className="text-xl font-bold mb-4">Bilibili 无限历史记录</h2>
@@ -530,12 +616,12 @@ export default function Home() {
                 <img
                   src="/images/wechat-qrcode.png"
                   alt="微信用户群二维码"
-                  className="w-36 h-36 bg-white p-1.5 rounded-md"
+                  className="w-48 h-48 bg-white p-1.5 rounded-md"
                 />
               </div>
             </div>
             <div className="text-sm text-gray-500">
-              © 2024 Bilibili 无限历史记录
+              © {new Date().getFullYear()} Bilibili 无限历史记录
             </div>
           </div>
         </div>
