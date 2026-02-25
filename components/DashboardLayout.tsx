@@ -18,6 +18,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="flex flex-1">
       {/* 左侧固定侧边栏 */}
       <Sidebar
+        collapsed={sidebarCollapsed}
         className="fixed left-0 top-16 bottom-0 z-40"
         onCollapseChange={handleSidebarCollapseChange}
       />
@@ -25,7 +26,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* 右侧内容区域 */}
       <div
         className={`flex-1 overflow-auto transition-all duration-300 ease-in-out ${
-          sidebarCollapsed ? "ml-16" : "ml-64"
+          sidebarCollapsed ? "ml-16" : "ml-40"
         }`}
       >
         <div className="p-6">{children}</div>

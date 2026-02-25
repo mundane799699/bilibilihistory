@@ -17,6 +17,7 @@ import {
 interface SidebarProps {
   className?: string;
   onCollapseChange?: (collapsed: boolean) => void;
+  collapsed?: boolean;
 }
 
 const menuItems = [
@@ -52,8 +53,11 @@ const menuItems = [
   },
 ];
 
-export default function Sidebar({ className, onCollapseChange }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(false);
+export default function Sidebar({
+  className,
+  onCollapseChange,
+  collapsed,
+}: SidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -66,14 +70,8 @@ export default function Sidebar({ className, onCollapseChange }: SidebarProps) {
   };
 
   const handleToggleCollapse = () => {
-    const newCollapsed = !collapsed;
-    setCollapsed(newCollapsed);
-    onCollapseChange?.(newCollapsed);
+    onCollapseChange?.(!collapsed);
   };
-
-  useEffect(() => {
-    onCollapseChange?.(collapsed);
-  }, []);
 
   return (
     <div
@@ -95,15 +93,17 @@ export default function Sidebar({ className, onCollapseChange }: SidebarProps) {
                 collapsed ? "justify-center" : "justify-start"
               } px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                 isActive
-                  ? "bg-gradient-to-r from-pink-50 to-blue-50 text-pink-600 border border-pink-200"
+                  ? "text-white bg-blue-500 "
                   : "text-gray-700 hover:bg-gray-100"
               }`}
               title={collapsed ? item.name : undefined}
             >
               <Icon className="w-5 h-5 flex-shrink-0" />
-              {!collapsed && (
-                <span className="ml-3 text-left">{item.name}</span>
-              )}
+              <span
+                className={`transition-all duration-300 ease-in-out text-left overflow-hidden whitespace-nowrap ${collapsed ? "max-w-0 ml-0" : "max-w-[120px] ml-3"}`}
+              >
+                {item.name}
+              </span>
             </button>
           );
         })}

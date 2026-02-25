@@ -28,8 +28,7 @@ export default function Header({ user }: HeaderProps) {
           className="flex items-center space-x-2 cursor-pointer"
           onClick={() => router.push("/")}
         >
-          <img src="/images/icon.svg" alt="Logo" className="w-8 h-8" />
-          <span className="text-xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
+          <span className="text-xl font-bold bg-gradient-to-r bg-blue-500 bg-clip-text text-transparent">
             Bilibili 无限历史记录
           </span>
         </div>
@@ -38,7 +37,7 @@ export default function Header({ user }: HeaderProps) {
         <div className="flex items-center space-x-4">
           {user && (
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+              <div className="w-8 h-8 bg-gradient-to-r bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                 {user.name ? user.name.charAt(0).toUpperCase() : "U"}
               </div>
               <span className="text-gray-700 font-medium">
@@ -50,7 +49,7 @@ export default function Header({ user }: HeaderProps) {
           <Button
             onClick={handleSignOut}
             variant="outline"
-            className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300 px-4 py-1.5"
+            className="text-white bg-blue-500 px-4 py-1.5"
           >
             退出登录
           </Button>

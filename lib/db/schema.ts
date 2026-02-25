@@ -78,6 +78,25 @@ export const memberships = pgTable(
   })
 );
 
+// better-auth 的 account 表（用于密码等凭证存储）
+export const accounts = pgTable("account", {
+  id: text("id").notNull().primaryKey(),
+  accountId: text("accountId").notNull(),
+  providerId: text("providerId").notNull(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id),
+  accessToken: text("accessToken"),
+  refreshToken: text("refreshToken"),
+  idToken: text("idToken"),
+  accessTokenExpiresAt: timestamp("accessTokenExpiresAt"),
+  refreshTokenExpiresAt: timestamp("refreshTokenExpiresAt"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("createdAt").notNull(),
+  updatedAt: timestamp("updatedAt").notNull(),
+});
+
 // 导出类型
 export type BilibiliHistory = typeof bilibiliHistory.$inferSelect;
 export type NewBilibiliHistory = typeof bilibiliHistory.$inferInsert;
@@ -87,3 +106,5 @@ export type NewUser = typeof users.$inferInsert;
 
 export type Membership = typeof memberships.$inferSelect;
 export type NewMembership = typeof memberships.$inferInsert;
+
+export type Account = typeof accounts.$inferSelect;

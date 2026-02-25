@@ -1,5 +1,5 @@
 import { db } from "./index";
-import { memberships, users, NewMembership, Membership } from "./schema";
+import { memberships, users, accounts, NewMembership, Membership } from "./schema";
 import { eq, desc, and, like, or, sql, count } from "drizzle-orm";
 
 type GetMembershipsParams = {
@@ -141,4 +141,18 @@ export async function updateMembership(
 // 删除会员
 export async function deleteMembership(id: number) {
   return await db.delete(memberships).where(eq(memberships.id, id)).returning();
+}
+
+// 根据邮箱重置密码（更新 account 表中的 password 字段）
+export async function resetPasswordByEmail(email: string, hashedPassword: string) {
+  const user = await findUserByEmail(email);
+  if (!user) return null;
+
+  const result = await db
+    .update(accounts)
+    .set({ password: hashedPassword, updatedAt: new Date() })
+    .where(and(eq(accounts.userId, user.id), eq(accounts.providerId, "credential")))
+    .returning();
+
+  return result[0] ?? null;
 }
