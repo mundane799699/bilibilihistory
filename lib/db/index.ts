@@ -1,9 +1,5 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { drizzle } from "drizzle-orm/node-postgres";
 
-const connectionString = process.env.DATABASE_URL!;
+import { pool } from "./pool";
 
-// 禁用预处理语句以避免与某些连接池的问题
-const client = postgres(connectionString, { prepare: false });
-
-export const db = drizzle(client);
+export const db = drizzle({ client: pool });
