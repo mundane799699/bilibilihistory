@@ -150,6 +150,8 @@ function DashboardContent() {
   );
 
   const [keywordInput, setKeywordInput] = useState(urlKeyword);
+  const [fromDateInput, setFromDateInput] = useState(fromDate);
+  const [toDateInput, setToDateInput] = useState(toDate);
   const [history, setHistory] = useState<HistoryItemType[]>([]);
   const [pagination, setPagination] = useState<PaginationInfo>({
     page: currentPage,
@@ -187,6 +189,11 @@ function DashboardContent() {
   useEffect(() => {
     setKeywordInput(urlKeyword);
   }, [urlKeyword]);
+
+  useEffect(() => {
+    setFromDateInput(fromDate);
+    setToDateInput(toDate);
+  }, [fromDate, toDate]);
 
   // Canonicalize malformed or redundant URL state without adding history entries.
   useEffect(() => {
@@ -305,23 +312,26 @@ function DashboardContent() {
     urlKeyword,
   ]);
 
-  const handleKeywordSearch = () => {
+  const handleSearch = () => {
     const normalizedKeyword = keywordInput.trim().slice(0, 100);
-    if (normalizedKeyword === urlKeyword && currentPage === 1) return;
+    const normalizedToDate = fromDateInput
+      ? toDateInput ?? fromDateInput
+      : undefined;
+    if (
+      normalizedKeyword === urlKeyword &&
+      fromDateInput === fromDate &&
+      normalizedToDate === toDate &&
+      currentPage === 1
+    ) {
+      return;
+    }
 
     const params = new URLSearchParams(searchParamsString);
     if (normalizedKeyword) params.set("q", normalizedKeyword);
     else params.delete("q");
-    params.delete("page");
-    navigate(params, "replace");
-    scrollToResults();
-  };
-
-  const handleDateChange = (nextFromDate?: string, nextToDate?: string) => {
-    const params = new URLSearchParams(searchParamsString);
-    if (nextFromDate) {
-      params.set("from", nextFromDate);
-      params.set("to", nextToDate ?? nextFromDate);
+    if (fromDateInput) {
+      params.set("from", fromDateInput);
+      params.set("to", normalizedToDate!);
     } else {
       params.delete("from");
       params.delete("to");
@@ -331,15 +341,12 @@ function DashboardContent() {
     scrollToResults();
   };
 
-  const handleClearFilters = () => {
-    setKeywordInput("");
-    const params = new URLSearchParams(searchParamsString);
-    params.delete("q");
-    params.delete("from");
-    params.delete("to");
-    params.delete("page");
-    navigate(params, "replace");
-    scrollToResults();
+  const handleDateDraftChange = (
+    nextFromDate?: string,
+    nextToDate?: string
+  ) => {
+    setFromDateInput(nextFromDate);
+    setToDateInput(nextToDate);
   };
 
   const handlePageChange = (nextPage: number) => {
@@ -413,14 +420,12 @@ function DashboardContent() {
     <div className="scroll-mt-24" ref={resultsTopRef}>
       <div className="mx-auto max-w-[1200px]">
         <HistoryFilters
-          fromDate={fromDate}
-          hasActiveFilters={hasActiveFilters}
+          fromDate={fromDateInput}
           keyword={keywordInput}
-          onClear={handleClearFilters}
-          onDateChange={handleDateChange}
+          onDateChange={handleDateDraftChange}
           onKeywordChange={setKeywordInput}
-          onSearch={handleKeywordSearch}
-          toDate={toDate}
+          onSearch={handleSearch}
+          toDate={toDateInput}
         />
 
         <div aria-live="polite" className="mb-4 text-sm text-gray-500">
@@ -457,15 +462,6 @@ function DashboardContent() {
                 ? "没有找到匹配的历史记录"
                 : "暂无历史记录"}
             </p>
-            {hasActiveFilters && (
-              <Button
-                className="mt-4"
-                onClick={handleClearFilters}
-                variant="outline"
-              >
-                清除筛选
-              </Button>
-            )}
           </div>
         )}
 
