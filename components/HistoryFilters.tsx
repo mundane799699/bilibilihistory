@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { CalendarIcon, Search, X } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { zhCN } from "date-fns/locale";
@@ -16,9 +16,11 @@ import {
 
 interface HistoryFiltersProps {
   keyword: string;
+  hasActiveFilters: boolean;
   fromDate?: string;
   toDate?: string;
   onKeywordChange: (value: string) => void;
+  onSearch: () => void;
   onDateChange: (fromDate?: string, toDate?: string) => void;
   onClear: () => void;
 }
@@ -64,9 +66,11 @@ function toDateRange(fromDate?: string, toDate?: string): DateRange | undefined 
 
 export function HistoryFilters({
   keyword,
+  hasActiveFilters,
   fromDate,
   toDate,
   onKeywordChange,
+  onSearch,
   onDateChange,
   onClear,
 }: HistoryFiltersProps) {
@@ -86,8 +90,6 @@ export function HistoryFilters({
     if (!toDate || fromDate === toDate) return fromDate;
     return `${fromDate} 至 ${toDate}`;
   }, [fromDate, toDate]);
-
-  const hasFilters = Boolean(keyword.trim() || fromDate || toDate);
 
   const handleCalendarOpenChange = (open: boolean) => {
     if (open) {
@@ -112,38 +114,48 @@ export function HistoryFilters({
     setIsCalendarOpen(false);
   };
 
+  const submitSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    onSearch();
+  };
+
   return (
     <div className="mb-5 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <div className="relative min-w-0 flex-1">
-          <Search
-            aria-hidden="true"
-            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
-          />
-          <Input
-            aria-label="搜索历史记录"
-            className="pl-9 pr-9"
-            maxLength={100}
-            onChange={(event) => onKeywordChange(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Escape" && keyword) {
-                onKeywordChange("");
-              }
-            }}
-            placeholder="搜索标题、UP 主或分区"
-            value={keyword}
-          />
-          {keyword && (
-            <button
-              aria-label="清空关键词"
-              className="absolute right-2 top-1/2 rounded p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
-              onClick={() => onKeywordChange("")}
-              type="button"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
+        <form className="flex min-w-0 flex-1 gap-2" onSubmit={submitSearch}>
+          <div className="relative min-w-0 flex-1">
+            <Search
+              aria-hidden="true"
+              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            />
+            <Input
+              aria-label="搜索历史记录"
+              className="pl-9 pr-10"
+              maxLength={100}
+              onChange={(event) => onKeywordChange(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Escape" && keyword) {
+                  onKeywordChange("");
+                }
+              }}
+              placeholder="搜索标题、UP 主或分区"
+              value={keyword}
+            />
+            {keyword && (
+              <button
+                aria-label="清空关键词"
+                className="absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                onClick={() => onKeywordChange("")}
+                type="button"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+          <Button className="shrink-0" type="submit">
+            搜索
+          </Button>
+        </form>
 
         <div className="flex min-w-0 items-center gap-2">
           <Popover open={isCalendarOpen} onOpenChange={handleCalendarOpenChange}>
@@ -181,7 +193,7 @@ export function HistoryFilters({
             </PopoverContent>
           </Popover>
 
-          {hasFilters && (
+          {hasActiveFilters && (
             <Button className="shrink-0" onClick={onClear} variant="ghost">
               清除筛选
             </Button>

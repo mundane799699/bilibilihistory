@@ -9,7 +9,6 @@ import {
   useState,
 } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useDebounce } from "use-debounce";
 
 import { HistoryFilters } from "@/components/HistoryFilters";
 import { HistoryItem } from "@/components/HistoryItem";
@@ -151,7 +150,6 @@ function DashboardContent() {
   );
 
   const [keywordInput, setKeywordInput] = useState(urlKeyword);
-  const [debouncedKeyword] = useDebounce(keywordInput, 400);
   const [history, setHistory] = useState<HistoryItemType[]>([]);
   const [pagination, setPagination] = useState<PaginationInfo>({
     page: currentPage,
@@ -221,24 +219,6 @@ function DashboardContent() {
     pageSize,
     searchParamsString,
     toDate,
-    urlKeyword,
-  ]);
-
-  useEffect(() => {
-    const normalizedKeyword = debouncedKeyword.trim().slice(0, 100);
-    if (normalizedKeyword === urlKeyword) return;
-
-    const params = new URLSearchParams(searchParamsString);
-    if (normalizedKeyword) params.set("q", normalizedKeyword);
-    else params.delete("q");
-    params.delete("page");
-    navigate(params, "replace");
-    scrollToResults();
-  }, [
-    debouncedKeyword,
-    navigate,
-    scrollToResults,
-    searchParamsString,
     urlKeyword,
   ]);
 
@@ -324,6 +304,18 @@ function DashboardContent() {
     toDate,
     urlKeyword,
   ]);
+
+  const handleKeywordSearch = () => {
+    const normalizedKeyword = keywordInput.trim().slice(0, 100);
+    if (normalizedKeyword === urlKeyword && currentPage === 1) return;
+
+    const params = new URLSearchParams(searchParamsString);
+    if (normalizedKeyword) params.set("q", normalizedKeyword);
+    else params.delete("q");
+    params.delete("page");
+    navigate(params, "replace");
+    scrollToResults();
+  };
 
   const handleDateChange = (nextFromDate?: string, nextToDate?: string) => {
     const params = new URLSearchParams(searchParamsString);
@@ -422,10 +414,12 @@ function DashboardContent() {
       <div className="mx-auto max-w-[1200px]">
         <HistoryFilters
           fromDate={fromDate}
+          hasActiveFilters={hasActiveFilters}
           keyword={keywordInput}
           onClear={handleClearFilters}
           onDateChange={handleDateChange}
           onKeywordChange={setKeywordInput}
+          onSearch={handleKeywordSearch}
           toDate={toDate}
         />
 
