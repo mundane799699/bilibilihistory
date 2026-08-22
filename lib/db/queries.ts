@@ -4,7 +4,57 @@ import {
   type NewBilibiliHistory,
   type BilibiliHistory,
 } from "./schema";
-import { eq, desc, and, like, or, sql } from "drizzle-orm";
+import {
+  eq,
+  desc,
+  and,
+  count,
+  gte,
+  ilike,
+  lt,
+  or,
+  sql,
+  type SQL,
+} from "drizzle-orm";
+
+export interface HistoryFilters {
+  keyword?: string;
+  startAt?: number;
+  endAt?: number;
+}
+
+function escapeLikePattern(value: string) {
+  return value.replace(/[\\%_]/g, "\\$&");
+}
+
+export function buildHistoryConditions(
+  userId: string,
+  filters: HistoryFilters = {}
+) {
+  const conditions: SQL[] = [eq(bilibiliHistory.user_id, userId)];
+  const keyword = filters.keyword?.trim();
+
+  if (keyword) {
+    const pattern = `%${escapeLikePattern(keyword)}%`;
+    const keywordCondition = or(
+      ilike(bilibiliHistory.title, pattern),
+      ilike(bilibiliHistory.author_name, pattern),
+      ilike(bilibiliHistory.tag_name, pattern)
+    );
+
+    if (keywordCondition) conditions.push(keywordCondition);
+  }
+
+  if (filters.startAt !== undefined) {
+    conditions.push(gte(bilibiliHistory.view_at, filters.startAt));
+  }
+
+  if (filters.endAt !== undefined) {
+    conditions.push(lt(bilibiliHistory.view_at, filters.endAt));
+  }
+
+  return and(...conditions);
+}
 
 // 获取用户的观看历史
 export async function getUserHistory(user_id: string, limit = 50) {
@@ -20,15 +70,18 @@ export async function getUserHistory(user_id: string, limit = 50) {
 export async function getUserHistoryWithPagination(
   userId: string,
   page: number = 1,
-  pageSize: number = 50
+  pageSize: number = 50,
+  filters: HistoryFilters = {}
 ) {
   const offset = (page - 1) * pageSize;
-  
+
   return await db
     .select()
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.user_id, userId))
-    .orderBy(desc(bilibiliHistory.view_at))
+    .where(buildHistoryConditions(userId, filters))
+    .orderBy(
+      sql`${bilibiliHistory.view_at} DESC NULLS LAST, ${bilibiliHistory.id} DESC NULLS LAST`
+    )
     .limit(pageSize)
     .offset(offset);
 }
@@ -151,24 +204,6 @@ export async function updateHistoryRecord(
     .returning();
 }
 
-// 搜索历史记录
-export async function searchHistory(userId: string, searchTerm: string) {
-  return await db
-    .select()
-    .from(bilibiliHistory)
-    .where(
-      and(
-        eq(bilibiliHistory.user_id, userId),
-        or(
-          like(bilibiliHistory.title, `%${searchTerm}%`),
-          like(bilibiliHistory.author_name, `%${searchTerm}%`),
-          like(bilibiliHistory.tag_name, `%${searchTerm}%`)
-        )
-      )
-    )
-    .orderBy(desc(bilibiliHistory.view_at));
-}
-
 // 获取用户统计信息
 export async function getUserStats(user_id: string) {
   const totalVideos = await db
@@ -209,11 +244,14 @@ export async function getTagStats(user_id: string) {
 }
 
 // 获取用户历史记录总数
-export async function getUserHistoryCount(user_id: string) {
+export async function getUserHistoryCount(
+  user_id: string,
+  filters: HistoryFilters = {}
+) {
   const result = await db
-    .select({ count: sql<number>`count(*)` })
+    .select({ count: count() })
     .from(bilibiliHistory)
-    .where(eq(bilibiliHistory.user_id, user_id));
+    .where(buildHistoryConditions(user_id, filters));
 
   return result[0]?.count || 0;
 }

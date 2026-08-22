@@ -18,8 +18,10 @@ const updateMembershipSchema = z.object({
 // 获取单个会员信息
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: idParam } = await params;
+
   try {
     // const session = await auth.api.getSession({ headers: await headers() });
     // if (!session) {
@@ -27,7 +29,7 @@ export async function GET(
     // }
     // TODO: 增加管理员角色校验
 
-    const id = parseInt(params.id);
+    const id = parseInt(idParam);
     if (isNaN(id)) {
       return NextResponse.json({ error: "无效的ID" }, { status: 400 });
     }
@@ -39,7 +41,7 @@ export async function GET(
 
     return NextResponse.json(membership);
   } catch (error) {
-    console.error(`获取会员(id: ${params.id})失败:`, error);
+    console.error(`获取会员(id: ${idParam})失败:`, error);
     return NextResponse.json({ error: "服务器错误" }, { status: 500 });
   }
 }
@@ -47,8 +49,10 @@ export async function GET(
 // 更新会员信息
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: idParam } = await params;
+
   try {
     // const session = await auth.api.getSession({ headers: await headers() });
     // if (!session) {
@@ -56,7 +60,7 @@ export async function PUT(
     // }
     // TODO: 增加管理员角色校验
 
-    const id = parseInt(params.id);
+    const id = parseInt(idParam);
     if (isNaN(id)) {
       return NextResponse.json({ error: "无效的ID" }, { status: 400 });
     }
@@ -84,7 +88,7 @@ export async function PUT(
 
     return NextResponse.json(updatedMembership[0]);
   } catch (error) {
-    console.error(`更新会员(id: ${params.id})失败:`, error);
+    console.error(`更新会员(id: ${idParam})失败:`, error);
     if (
       error &&
       typeof error === "object" &&
@@ -100,8 +104,10 @@ export async function PUT(
 // 删除会员
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: idParam } = await params;
+
   try {
     // const session = await auth.api.getSession({ headers: await headers() });
     // if (!session) {
@@ -109,7 +115,7 @@ export async function DELETE(
     // }
     // TODO: 增加管理员角色校验
 
-    const id = parseInt(params.id);
+    const id = parseInt(idParam);
     if (isNaN(id)) {
       return NextResponse.json({ error: "无效的ID" }, { status: 400 });
     }
@@ -122,7 +128,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: "会员删除成功" });
   } catch (error) {
-    console.error(`删除会员(id: ${params.id})失败:`, error);
+    console.error(`删除会员(id: ${idParam})失败:`, error);
     return NextResponse.json({ error: "服务器错误" }, { status: 500 });
   }
 }

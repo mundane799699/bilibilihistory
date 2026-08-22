@@ -1,15 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import {
-  getUserHistory,
   getUserHistoryWithPagination,
   upsertHistoryRecord,
   upsertHistoryRecords,
   getUserHistoryCount,
   deleteHistoryRecord,
+  type HistoryFilters,
 } from "@/lib/db/queries";
 import { headers } from "next/headers";
 import { getMembershipByUserId } from "@/lib/db/membership_queries";
+
+function parseIntegerParameter(
+  value: string | null,
+  defaultValue: number,
+  minimum: number
+) {
+  if (value === null) return defaultValue;
+  if (!/^\d+$/.test(value)) return undefined;
+
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) && parsed >= minimum ? parsed : undefined;
+}
 
 // 获取历史记录
 export async function GET(request: NextRequest) {
@@ -24,26 +36,73 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
 
-    // 检查是否有分页参数
-    const page = searchParams.get("page") || "1";
-    const pageSize = searchParams.get("pageSize") || "50";
-
-    // 分页查询
-    const pageNum = parseInt(page);
-    const pageSizeNum = parseInt(pageSize);
+    const pageNum = parseIntegerParameter(searchParams.get("page"), 1, 1);
+    const pageSizeNum = parseIntegerParameter(
+      searchParams.get("pageSize"),
+      50,
+      1
+    );
 
     // 验证分页参数
-    if (pageNum < 1 || pageSizeNum < 1 || pageSizeNum > 100) {
+    if (
+      pageNum === undefined ||
+      pageSizeNum === undefined ||
+      pageSizeNum > 100
+    ) {
       return NextResponse.json(
         { error: "分页参数无效：page必须≥1，pageSize必须在1-100之间" },
         { status: 400 }
       );
     }
 
+    const rawKeyword = searchParams.get("keyword");
+    const keyword = rawKeyword?.trim();
+    if (keyword && keyword.length > 100) {
+      return NextResponse.json(
+        { error: "关键词长度不能超过100个字符" },
+        { status: 400 }
+      );
+    }
+
+    const startAt = parseIntegerParameter(searchParams.get("startAt"), 0, 0);
+    const endAt = parseIntegerParameter(searchParams.get("endAt"), 0, 0);
+
+    if (
+      (searchParams.has("startAt") && startAt === undefined) ||
+      (searchParams.has("endAt") && endAt === undefined)
+    ) {
+      return NextResponse.json(
+        { error: "日期参数无效：startAt和endAt必须是非负Unix秒时间戳" },
+        { status: 400 }
+      );
+    }
+
+    if (
+      searchParams.has("startAt") &&
+      searchParams.has("endAt") &&
+      startAt! >= endAt!
+    ) {
+      return NextResponse.json(
+        { error: "日期参数无效：startAt必须小于endAt" },
+        { status: 400 }
+      );
+    }
+
+    const filters: HistoryFilters = {
+      keyword: keyword || undefined,
+      startAt: searchParams.has("startAt") ? startAt : undefined,
+      endAt: searchParams.has("endAt") ? endAt : undefined,
+    };
+
     // 获取总数和分页数据
     const [history, totalCount] = await Promise.all([
-      getUserHistoryWithPagination(session.user.id, pageNum, pageSizeNum),
-      getUserHistoryCount(session.user.id),
+      getUserHistoryWithPagination(
+        session.user.id,
+        pageNum,
+        pageSizeNum,
+        filters
+      ),
+      getUserHistoryCount(session.user.id, filters),
     ]);
 
     const totalPages = Math.ceil(totalCount / pageSizeNum);
@@ -56,7 +115,7 @@ export async function GET(request: NextRequest) {
         totalCount,
         totalPages,
         hasNextPage: pageNum < totalPages,
-        hasPrevPage: pageNum > 1,
+        hasPrevPage: totalPages > 0 && pageNum > 1,
       },
     });
   } catch (error) {

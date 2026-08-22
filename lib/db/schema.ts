@@ -43,6 +43,11 @@ export const bilibiliHistory = pgTable(
     viewAtIdx: index("view_at_idx").on(table.view_at),
     authorNameIdx: index("author_name_idx").on(table.author_name),
     tagNameIdx: index("tag_name_idx").on(table.tag_name),
+    userViewAtIdIdx: index("bilibili_history_user_view_at_id_idx").on(
+      table.user_id,
+      table.view_at.desc().nullsLast(),
+      table.id.desc()
+    ),
   })
 );
 
