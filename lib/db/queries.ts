@@ -1,4 +1,5 @@
 import { db } from "./index";
+import { sanitizeHistoryRecord } from "./history-sanitization";
 import {
   bilibiliHistory,
   type NewBilibiliHistory,
@@ -91,7 +92,7 @@ export async function addHistoryRecord(data: NewBilibiliHistory) {
   return await db
     .insert(bilibiliHistory)
     .values({
-      ...data,
+      ...sanitizeHistoryRecord(data),
       updated_at: new Date(),
     })
     .returning();
@@ -103,7 +104,7 @@ export async function addHistoryRecords(records: NewBilibiliHistory[]) {
     .insert(bilibiliHistory)
     .values(
       records.map((record) => ({
-        ...record,
+        ...sanitizeHistoryRecord(record),
         updated_at: new Date(),
       }))
     )
@@ -115,7 +116,7 @@ export async function upsertHistoryRecord(data: NewBilibiliHistory) {
   return await db
     .insert(bilibiliHistory)
     .values({
-      ...data,
+      ...sanitizeHistoryRecord(data),
       updated_at: new Date(),
     })
     .onConflictDoUpdate({
@@ -146,7 +147,7 @@ export async function upsertHistoryRecords(records: NewBilibiliHistory[]) {
     .insert(bilibiliHistory)
     .values(
       records.map((record) => ({
-        ...record,
+        ...sanitizeHistoryRecord(record),
         updatedAt: new Date(),
       }))
     )
