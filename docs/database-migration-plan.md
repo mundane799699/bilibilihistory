@@ -1,5 +1,7 @@
 # Supabase PostgreSQL 迁移到自建 PostgreSQL：执行方案
 
+> 历史文档：本文记录 2026-08 的 Supabase → `1.15.53.251` 迁移。2026-10 的 `1.15.53.251` → `118.25.22.240` 迁移请使用 [服务器迁移方案](./database-migration-2026-10-server-to-server.md)。
+
 > 文档状态：正式迁移及生产切换完成，进入观察期
 > 盘点日期：2026-08-22
 > 项目：`bilibili-history-web`
