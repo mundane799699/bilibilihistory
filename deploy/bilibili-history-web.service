@@ -1,0 +1,30 @@
+[Unit]
+Description=Bilibili History Web
+After=network.target bilibili-postgresql.service
+Wants=bilibili-postgresql.service
+
+[Service]
+Type=simple
+User=bilibili-web
+Group=bilibili-web
+WorkingDirectory=/opt/bilibili-history-web/current
+EnvironmentFile=/etc/bilibili-history-web/production.env
+Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3010
+Environment=NEXT_TELEMETRY_DISABLED=1
+Environment=NODE_OPTIONS=--max-old-space-size=512
+ExecStart=/opt/bilibili-history-web/runtime/bin/node server.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/bilibili-history-web/current/.next/cache
+SyslogIdentifier=bilibili-history-web
+
+[Install]
+WantedBy=multi-user.target
