@@ -7,6 +7,7 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
+    "deploy:server": "./deploy.sh",
     "lint": "next lint",
     "test:history": "node --experimental-strip-types --test tests/history-sanitization.test.mjs",
     "db:generate": "drizzle-kit generate",
