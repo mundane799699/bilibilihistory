@@ -67,6 +67,17 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function MembershipsManager() {
+  const planLabel = (plan?: string | null) => {
+    const labels: Record<string, string> = {
+      month: "月度会员",
+      monthly: "月度会员",
+      year: "年度会员",
+      yearly: "年度会员",
+      lifetime: "永久会员",
+    };
+    return plan ? labels[plan] ?? plan : "N/A";
+  };
+
   const [memberships, setMemberships] = useState<MembershipWithUser[]>([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -299,7 +310,7 @@ export default function MembershipsManager() {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell>{m.plan || "N/A"}</TableCell>
+                  <TableCell>{planLabel(m.plan)}</TableCell>
                   <TableCell>{m.status}</TableCell>
                   <TableCell>
                     {m.expiresAt

@@ -5,14 +5,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { authClient } from "@/lib/auth-client";
+import PayDialog from "@/components/PayDialog";
 
 const FREE_FEATURES = ["无限同步 B 站历史记录到本地"];
 
@@ -62,6 +56,7 @@ const plans = [
 export default function PricingPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [payPlan, setPayPlan] = useState<(typeof plans)[number] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -77,36 +72,6 @@ export default function PricingPage() {
     };
     getSession();
   }, []);
-
-  const openQr = (title: string, hint: string) => (
-    <Dialog>
-      <DialogTrigger asChild>
-        <button className="mt-7 inline-flex h-11 items-center justify-center rounded-xl bg-primary text-[14px] font-medium text-primary-foreground transition-opacity hover:opacity-90">
-          {title}
-        </button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{hint}</DialogTitle>
-        </DialogHeader>
-        <div className="flex flex-col items-center justify-center p-4">
-          <Image
-            src="/images/wechat-qrcode.png"
-            alt="微信二维码"
-            width={240}
-            height={240}
-            className="rounded-xl border border-border"
-          />
-          <p className="mt-4 text-center text-[13px] leading-relaxed text-muted-foreground">
-            添加微信付款，作者会手动为你开通会员。
-          </p>
-          <p className="mt-3 text-center text-[13px] font-medium">
-            加好友时请备注「{hint.replace("联系我开通", "")}」
-          </p>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
 
   return (
     <div className="min-h-screen bg-white text-foreground">
@@ -233,17 +198,25 @@ export default function PricingPage() {
                   免费使用
                 </Link>
               ) : (
-                openQr(
-                  `升级到${p.name}`,
-                  p.id === "month" ? "联系我开通月会员" : "联系我开通年会员"
-                )
+                <button
+                  onClick={() => {
+                    if (!user) {
+                      router.push("/login");
+                      return;
+                    }
+                    setPayPlan(p);
+                  }}
+                  className="mt-7 inline-flex h-11 items-center justify-center rounded-xl bg-primary text-[14px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  升级到{p.name}
+                </button>
               )}
             </div>
           ))}
         </div>
 
         <p className="mt-6 text-center text-[12.5px] text-muted-foreground">
-          会员由作者手动开通，付款后请留意微信消息。
+          微信扫码付款，支付成功后会员自动开通，无需等待人工处理。
         </p>
       </section>
 
@@ -292,6 +265,18 @@ export default function PricingPage() {
           </div>
         </div>
       </section>
+
+      {payPlan && (
+        <PayDialog
+          plan={{ id: payPlan.id, name: payPlan.name, price: payPlan.price }}
+          onClose={() => setPayPlan(null)}
+          onPaid={() => {
+            setPayPlan(null);
+            router.refresh();
+            router.push("/dashboard/profile");
+          }}
+        />
+      )}
 
       {/* 页脚 */}
       <footer className="border-t border-border/60">

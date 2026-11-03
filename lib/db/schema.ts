@@ -8,6 +8,7 @@ import {
   bigint,
   primaryKey,
   index,
+  numeric,
 } from "drizzle-orm/pg-core";
 
 // B站历史记录表
@@ -83,6 +84,35 @@ export const memberships = pgTable(
   })
 );
 
+// 支付订单：一次购买一条，成功后由 markOrderPaid 幂等地开通/续期会员
+export const orders = pgTable(
+  "orders",
+  {
+    outTradeNo: text("out_trade_no").primaryKey(),
+    userId: text("user_id").notNull(),
+    // 下单时记下邮箱：本地开发库里可能没有 user 行，开通会员时要用它补一条占位记录
+    userEmail: text("user_email"),
+    planId: text("plan_id").notNull(), // 'month' | 'year'
+    amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+    days: integer("days").notNull(),
+    status: text("status").notNull().default("pending"), // pending | paid | closed
+    channel: text("channel").notNull().default("wxpay"),
+    qrUrl: text("qr_url"),
+    payNo: text("pay_no"),
+    // 带时区：下单时间要参与「是否已过模拟支付等待期」的判断，
+    // 用 timestamp without time zone 会因本地时区与数据库时区不同而算错。
+    checkedAt: timestamp("checked_at", { withTimezone: true }),
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    userIdx: index("orders_user_idx").on(table.userId),
+    statusIdx: index("orders_status_idx").on(table.status),
+  })
+);
+
 // better-auth 的 account 表（用于密码等凭证存储）
 export const accounts = pgTable("account", {
   id: text("id").notNull().primaryKey(),
@@ -111,5 +141,8 @@ export type NewUser = typeof users.$inferInsert;
 
 export type Membership = typeof memberships.$inferSelect;
 export type NewMembership = typeof memberships.$inferInsert;
+
+export type Order = typeof orders.$inferSelect;
+export type NewOrder = typeof orders.$inferInsert;
 
 export type Account = typeof accounts.$inferSelect;

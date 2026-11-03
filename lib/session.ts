@@ -13,13 +13,20 @@ export async function getSession() {
   if (upstream) {
     const incoming = await headers();
     const cookie = incoming.get("cookie") ?? "";
-    const res = await fetch(`${upstream}/api/auth/get-session`, {
-      headers: { cookie, origin: new URL(upstream).origin },
-      cache: "no-store",
-    });
-    if (!res.ok) return null;
-    const data = await res.json().catch(() => null);
-    return data?.session ? data : null;
+    const origin = process.env.AUTH_PROXY_ORIGIN || new URL(upstream).origin;
+    try {
+      const res = await fetch(`${upstream}/api/auth/get-session`, {
+        headers: { cookie, origin },
+        cache: "no-store",
+      });
+      if (!res.ok) return null;
+      const data = await res.json().catch(() => null);
+      return data?.session ? data : null;
+    } catch (error) {
+      // 上游不可达时按未登录处理，避免整页 500
+      console.error("[session] upstream unreachable:", (error as Error).message);
+      return null;
+    }
   }
 
   const { auth } = await import("./auth");

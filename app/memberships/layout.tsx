@@ -2,13 +2,18 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Users, KeyRound } from "lucide-react";
+import { Users, KeyRound, Receipt } from "lucide-react";
 
 const menuItems = [
   {
     name: "会员管理",
     href: "/memberships",
     icon: Users,
+  },
+  {
+    name: "订单管理",
+    href: "/memberships/orders",
+    icon: Receipt,
   },
   {
     name: "密码管理",

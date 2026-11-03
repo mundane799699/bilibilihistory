@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getSession } from "@/lib/session";
 import { getMembershipByUserId } from "@/lib/db/membership_queries";
+import { reconcileUserOrders } from "@/lib/pay/service";
 
 const planNames: Record<string, string> = {
   monthly: "月会员",
@@ -44,6 +45,9 @@ export default async function ProfilePage() {
   if (!session) {
     redirect("/login");
   }
+
+  // 回调白名单受限，进页面时主动和蓝兔对一次账，避免用户关掉弹窗后会员没开通
+  await reconcileUserOrders(session.user.id).catch(() => {});
 
   const membership = await getMembershipByUserId(session.user.id);
   const expiresAt = membership?.expiresAt

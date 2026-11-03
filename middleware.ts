@@ -8,14 +8,38 @@ import { NextRequest, NextResponse } from "next/server";
 function proxyHeaders(req: NextRequest) {
   const upstream = process.env.AUTH_PROXY_TARGET;
   if (!upstream) return null;
-  const origin = new URL(upstream).origin;
+  const origin = process.env.AUTH_PROXY_ORIGIN || new URL(upstream).origin;
   const headers = new Headers(req.headers);
   headers.set("origin", origin);
   headers.set("referer", `${origin}/`);
   return headers;
 }
 
+/** 后台页面与后台接口共用同一套 Basic 凭据 */
+function basicAuthOk(req: NextRequest) {
+  const basicAuth = req.headers.get("authorization");
+  if (!basicAuth) return false;
+  const authValue = basicAuth.split(" ")[1] ?? "";
+  // Using Buffer to decode base64 to be compatible with Node.js and Edge runtimes
+  const [user, pwd] = Buffer.from(authValue, "base64").toString().split(":");
+  return (
+    user === process.env.MEMBERSHIPS_USERNAME &&
+    pwd === process.env.MEMBERSHIPS_PASSWORD
+  );
+}
+
 export function middleware(req: NextRequest) {
+  // 订单接口带支付数据，必须和后台页面用同一套凭据
+  if (req.nextUrl.pathname.startsWith("/api/orders")) {
+    if (!basicAuthOk(req)) {
+      return new NextResponse("Authentication required", {
+        status: 401,
+        headers: { "WWW-Authenticate": 'Basic realm="Secure Area"' },
+      });
+    }
+    return NextResponse.next();
+  }
+
   // 只代理 API，页面本身仍由本地 Next.js 渲染新界面
   if (req.nextUrl.pathname.startsWith("/api")) {
     const headers = proxyHeaders(req);
@@ -25,20 +49,7 @@ export function middleware(req: NextRequest) {
   }
 
   // /memberships 保留原有的 Basic Auth
-  const basicAuth = req.headers.get("authorization");
-
-  if (basicAuth) {
-    const authValue = basicAuth.split(" ")[1];
-    // Using Buffer to decode base64 to be compatible with Node.js and Edge runtimes
-    const [user, pwd] = Buffer.from(authValue, "base64").toString().split(":");
-
-    if (
-      user === process.env.MEMBERSHIPS_USERNAME &&
-      pwd === process.env.MEMBERSHIPS_PASSWORD
-    ) {
-      return NextResponse.next();
-    }
-  }
+  if (basicAuthOk(req)) return NextResponse.next();
 
   return new NextResponse("Authentication required", {
     status: 401,
@@ -49,5 +60,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/memberships", "/api/:path*"],
+  matcher: ["/memberships", "/memberships/:path*", "/api/:path*"],
 };
