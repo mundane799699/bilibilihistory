@@ -102,11 +102,11 @@ export function HistoryPagination({
   };
 
   return (
-    <div className="mt-8 rounded-lg border border-gray-200 bg-white px-4 py-3 shadow-sm">
+    <div className="mt-6 rounded-xl border border-border bg-white px-4 py-3 shadow-card md:mt-8">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-start">
-          <span className="text-sm text-gray-600">共 {totalCount} 条</span>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <span className="text-sm text-muted-foreground">共 {totalCount} 条</span>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>每页</span>
             <Select
               onValueChange={(value) => onPageSizeChange(Number(value))}
@@ -188,7 +188,7 @@ export function HistoryPagination({
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
-              <span className="min-w-[92px] text-center text-sm text-gray-600">
+              <span className="min-w-[92px] text-center text-sm text-muted-foreground">
                 第 {page}/{totalPages} 页
               </span>
               <Button
@@ -206,7 +206,7 @@ export function HistoryPagination({
               className="flex flex-wrap items-center justify-center gap-2 lg:justify-end"
               onSubmit={submitJump}
             >
-              <label className="text-sm text-gray-600" htmlFor="history-page-jump">
+              <label className="text-sm text-muted-foreground" htmlFor="history-page-jump">
                 前往
               </label>
               <Input
@@ -221,7 +221,7 @@ export function HistoryPagination({
                 pattern="[0-9]*"
                 value={jumpValue}
               />
-              <span className="text-sm text-gray-600">页</span>
+              <span className="text-sm text-muted-foreground">页</span>
               <Button size="sm" type="submit" variant="outline">
                 跳转
               </Button>

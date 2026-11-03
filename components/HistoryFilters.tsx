@@ -116,7 +116,7 @@ export function HistoryFilters({
   };
 
   return (
-    <div className="mb-5 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+    <div className="mb-5 rounded-xl border border-border bg-white p-3 shadow-card">
       <form
         className="flex flex-col gap-3 md:flex-row md:items-center"
         onSubmit={submitSearch}
@@ -124,11 +124,11 @@ export function HistoryFilters({
         <div className="relative min-w-0 flex-1">
           <Search
             aria-hidden="true"
-            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+            className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
           />
           <Input
             aria-label="搜索历史记录"
-            className="pl-9 pr-10"
+            className="h-10 pl-9 pr-10"
             maxLength={100}
             onChange={(event) => onKeywordChange(event.target.value)}
             onKeyDown={(event) => {
@@ -142,7 +142,7 @@ export function HistoryFilters({
           {keyword && (
             <button
               aria-label="清空关键词"
-              className="absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+              className="absolute right-1 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               onClick={() => onKeywordChange("")}
               type="button"
             >
@@ -193,7 +193,7 @@ export function HistoryFilters({
             {fromDate && (
               <button
                 aria-label="清除日期"
-                className="absolute right-1 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                className="absolute right-1 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 onClick={clearDateRange}
                 type="button"
               >

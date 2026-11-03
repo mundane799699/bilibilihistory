@@ -1,17 +1,10 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Check, BookMarked, BadgePercent, Send, User } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,10 +12,52 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Image from "next/image";
-import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
-import { useEffect, useState } from "react";
+
+const FREE_FEATURES = ["无限同步 B 站历史记录到本地"];
+
+const VIP_FEATURES = [
+  "无限同步 B 站历史记录到本地",
+  "无限上传历史记录到服务器，多设备查看",
+  "加入 VIP 用户群，需求优先响应",
+  "收藏管理、视频备份等新功能优先体验",
+];
+
+const plans = [
+  {
+    id: "free",
+    name: "免费版",
+    desc: "基础功能，一直可用",
+    price: "0",
+    unit: "",
+    original: "",
+    note: "",
+    features: FREE_FEATURES,
+    highlight: false,
+  },
+  {
+    id: "month",
+    name: "月会员",
+    desc: "全部功能",
+    price: "9.9",
+    unit: "/月",
+    original: "¥12",
+    note: "",
+    features: VIP_FEATURES,
+    highlight: false,
+  },
+  {
+    id: "year",
+    name: "年会员",
+    desc: "全部功能",
+    price: "99",
+    unit: "/年",
+    original: "¥118.8",
+    note: "相当于 ¥8.25/月，省 17%",
+    features: VIP_FEATURES,
+    highlight: true,
+  },
+];
 
 export default function PricingPage() {
   const router = useRouter();
@@ -34,283 +69,247 @@ export default function PricingPage() {
       try {
         const { data: session } = await authClient.getSession();
         setUser(session?.user || null);
-      } catch (error) {
+      } catch {
         setUser(null);
       } finally {
         setIsLoading(false);
       }
     };
-
     getSession();
   }, []);
 
+  const openQr = (title: string, hint: string) => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button className="mt-7 inline-flex h-11 items-center justify-center rounded-xl bg-primary text-[14px] font-medium text-primary-foreground transition-opacity hover:opacity-90">
+          {title}
+        </button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>{hint}</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col items-center justify-center p-4">
+          <Image
+            src="/images/wechat-qrcode.png"
+            alt="微信二维码"
+            width={240}
+            height={240}
+            className="rounded-xl border border-border"
+          />
+          <p className="mt-4 text-center text-[13px] leading-relaxed text-muted-foreground">
+            添加微信付款，作者会手动为你开通会员。
+          </p>
+          <p className="mt-3 text-center text-[13px] font-medium">
+            加好友时请备注「{hint.replace("联系我开通", "")}」
+          </p>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm sticky top-0 z-50 w-full">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div
-            className="flex items-center space-x-2 cursor-pointer"
-            onClick={() => router.push("/")}
-          >
-            <img src="/images/icon.svg" alt="Logo" className="w-8 h-8" />
-            <span className="text-xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
+    <div className="min-h-screen bg-white text-foreground">
+      {/* 导航 */}
+      <header className="sticky top-0 z-50 border-b border-border/60 bg-white/80 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-page items-center justify-between px-4 md:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-2.5">
+            <img
+              src="/images/icon.svg"
+              alt="Bilibili 无限历史记录"
+              className="h-8 w-8"
+            />
+            <span className="truncate text-[14px] font-semibold tracking-tight md:text-[15px]">
               Bilibili 无限历史记录
             </span>
-          </div>
-          <div className="flex items-center space-x-6">
-            <Link
-              href="https://v3oxu28gnc.feishu.cn/docx/MZp8dCXd1otO9oxevQUcIlxFnPg?from=from_copylink"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-1.5 text-gray-600 hover:text-[#00a1d6] font-medium transition-colors"
-            >
-              <BookMarked className="h-4 w-4" />
-              <span>文档</span>
-            </Link>
-            <Link
-              href="/pricing"
-              className="flex items-center space-x-1.5 text-[#00a1d6] font-medium transition-colors"
-            >
-              <BadgePercent className="h-4 w-4" />
-              <span>价格</span>
-            </Link>
-            <Link
-              href="https://c1p0xw7om7n.feishu.cn/share/base/form/shrcneS0t8RdC3byY9xC5ftQgub"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-1.5 text-gray-600 hover:text-[#00a1d6] font-medium transition-colors"
-            >
-              <Send className="h-4 w-4" />
-              <span>反馈</span>
-            </Link>
+          </Link>
 
-            {/* 根据登录状态显示不同内容 */}
-            {isLoading ? (
-              <div className="text-gray-500">加载中...</div>
-            ) : user ? (
-              <Link
-                href="/dashboard"
-                className="flex items-center space-x-2 bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
-              >
-                <User className="h-4 w-4" />
-                <span>{user.name}</span>
-              </Link>
-            ) : (
-              <Link
-                href="/login"
-                className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
-              >
-                登录
-              </Link>
-            )}
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="hidden items-center gap-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              返回首页
+            </Link>
+            {!isLoading &&
+              (user ? (
+                <Link
+                  href="/dashboard"
+                  className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  进入控制台
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  登录
+                </Link>
+              ))}
           </div>
         </div>
-      </nav>
-      <div className="w-full max-w-6xl mx-auto py-6 px-4">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
+      </header>
+
+      {/* 标题 */}
+      <section className="relative overflow-hidden">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(55%_50%_at_50%_0%,rgba(251,114,153,0.12),transparent_70%)]"
+        />
+        <div className="relative mx-auto max-w-page px-6 pb-8 pt-12 text-center md:pb-10 md:pt-16 lg:px-8 lg:pt-24">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-white px-3 py-1 text-eyebrow text-muted-foreground">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
+            价格
+          </span>
+          <h1 className="mx-auto mt-6 max-w-2xl text-headline text-balance">
             选择适合你的方案
           </h1>
-          <p className="mt-4 text-xl text-muted-foreground">
-            简单、透明的定价，助力你的 Bilibili 历史记录管理
+          <p className="mx-auto mt-5 max-w-xl text-subhead text-muted-foreground">
+            本地同步永久免费。需要多设备查看时，再考虑升级。
           </p>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          <Card className="flex flex-col">
-            <CardHeader>
-              <CardTitle>Free</CardTitle>
-              <CardDescription>免费版</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <div className="text-4xl font-bold">¥0</div>
-              <ul className="mt-6 space-y-4">
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>无限同步B站的历史记录到本地</span>
-                </li>
-              </ul>
-            </CardContent>
-            <CardFooter></CardFooter>
-          </Card>
-
-          <Card className="border-purple-500 flex flex-col relative shadow-lg">
-            <Badge className="absolute -top-4 left-1/2 -translate-x-1/2">
-              推荐
-            </Badge>
-            <CardHeader>
-              <CardTitle>月会员</CardTitle>
-              <CardDescription>Monthly VIP</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <div className="flex items-baseline">
-                <span className="text-4xl font-bold">¥9.9</span>
-                <span className="ml-2 text-xl text-muted-foreground line-through">
-                  ¥12
+      {/* 方案卡片 */}
+      <section className="mx-auto max-w-page px-6 pb-20 lg:px-8">
+        <div className="mx-auto grid max-w-4xl items-stretch gap-4 md:grid-cols-3">
+          {plans.map((p) => (
+            <div
+              key={p.id}
+              className={`relative flex flex-col rounded-2xl border p-6 md:p-7 ${
+                p.highlight
+                  ? "border-foreground/15 bg-white shadow-lift ring-1 ring-foreground/5"
+                  : "border-border bg-white shadow-card"
+              }`}
+            >
+              {p.highlight && (
+                <span className="absolute -top-2.5 left-7 z-10 rounded-full bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground">
+                  推荐
                 </span>
-                <span className="ml-2 text-muted-foreground">/ 月</span>
-              </div>
-              <ul className="mt-6 space-y-4">
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>无限同步B站的历史记录到本地</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>
-                    <strong>无限上传历史记录到服务器，实现多设备查看</strong>
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>
-                    <strong>加入VIP用户群, 提出的需求优先响应</strong>
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>
-                    <strong>收藏管理、视频备份等更多功能正在开发中...</strong>
-                  </span>
-                </li>
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="w-full">升级到月会员</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>联系我开通月会员</DialogTitle>
-                  </DialogHeader>
-                  <div className="flex flex-col items-center justify-center p-4">
-                    <Image
-                      src="/images/wechat-qrcode.png"
-                      alt="wechat qrcode"
-                      width={250}
-                      height={250}
-                      className="rounded-md"
-                    />
-                    <p className="mt-4 text-center text-sm text-muted-foreground">
-                      添加微信，付款，作者将手动为您开通会员。
-                    </p>
-                    <p className="font-bold mt-4 text-center text-base text-muted-foreground">
-                      加好友时请备注"开通月会员"
-                    </p>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </CardFooter>
-          </Card>
+              )}
 
-          <Card className="border-green-500 flex flex-col relative shadow-lg">
-            <Badge className="absolute -top-4 left-1/2 -translate-x-1/2 bg-green-500">
-              最划算
-            </Badge>
-            <CardHeader>
-              <CardTitle>年会员</CardTitle>
-              <CardDescription>Yearly VIP</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <div className="flex items-baseline">
-                <span className="text-4xl font-bold">¥99</span>
-                <span className="ml-2 text-xl text-muted-foreground line-through">
-                  ¥118.8
+              <h2 className="text-[15px] font-semibold">{p.name}</h2>
+              <p className="mt-1 text-[13px] text-muted-foreground">{p.desc}</p>
+
+              <div className="mt-6 flex items-baseline gap-1.5">
+                <span className="text-[13px] text-muted-foreground">¥</span>
+                <span className="text-[34px] font-semibold leading-none tracking-tight">
+                  {p.price}
                 </span>
-                <span className="ml-2 text-muted-foreground">/ 年</span>
+                {p.unit && (
+                  <span className="text-[13px] text-muted-foreground">
+                    {p.unit}
+                  </span>
+                )}
+                {p.original && (
+                  <span className="ml-1 text-[13px] text-muted-foreground/70 line-through">
+                    {p.original}
+                  </span>
+                )}
               </div>
-              <div className="mt-2 text-sm text-green-600 font-medium">
-                相当于每月仅需 ¥8.25，节省 17%
-              </div>
-              <ul className="mt-6 space-y-4">
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>无限同步B站的历史记录到本地</span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>
-                    <strong>无限上传历史记录到服务器，实现多设备查看</strong>
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>
-                    <strong>加入VIP用户群, 提出的需求优先响应</strong>
-                  </span>
-                </li>
-                <li className="flex items-start">
-                  <Check className="w-5 h-5 text-green-500 mr-2 mt-1 flex-shrink-0" />
-                  <span>
-                    <strong>收藏管理、视频备份等更多功能正在开发中...</strong>
-                  </span>
-                </li>
+              {p.note && (
+                <p className="mt-1.5 text-[12px] text-primary">{p.note}</p>
+              )}
+
+              <ul className="mt-6 flex-1 space-y-2.5">
+                {p.features.map((f) => (
+                  <li
+                    key={f}
+                    className="flex items-start gap-2 text-[13.5px] leading-relaxed text-muted-foreground"
+                  >
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    {f}
+                  </li>
+                ))}
               </ul>
-            </CardContent>
-            <CardFooter>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="w-full bg-green-600 hover:bg-green-700">升级到年会员</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>联系我开通年会员</DialogTitle>
-                  </DialogHeader>
-                  <div className="flex flex-col items-center justify-center p-4">
-                    <Image
-                      src="/images/wechat-qrcode.png"
-                      alt="wechat qrcode"
-                      width={250}
-                      height={250}
-                      className="rounded-md"
-                    />
-                    <p className="mt-4 text-center text-sm text-muted-foreground">
-                      添加微信，付款，作者将手动为您开通会员。
-                    </p>
-                    <p className="font-bold mt-4 text-center text-base text-muted-foreground">
-                      加好友时请备注"开通年会员"
-                    </p>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </CardFooter>
-          </Card>
+
+              {p.id === "free" ? (
+                <Link
+                  href={user ? "/dashboard" : "/login"}
+                  className="mt-7 inline-flex h-11 items-center justify-center rounded-xl border border-border text-[14px] font-medium transition-colors hover:bg-muted/50"
+                >
+                  免费使用
+                </Link>
+              ) : (
+                openQr(
+                  `升级到${p.name}`,
+                  p.id === "month" ? "联系我开通月会员" : "联系我开通年会员"
+                )
+              )}
+            </div>
+          ))}
         </div>
 
-        <div className="mt-16 ">
-          <h2 className="text-center text-3xl font-bold tracking-tight">
-            为什么要收费？
-          </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            我们收费是为了能够覆盖服务器、数据库等基础设施的成本，并投入更多的时间和精力来维护和开发新功能，从而为您提供更稳定、更优质的服务。
-          </p>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            感谢您的理解与支持。
-          </p>
-        </div>
+        <p className="mt-6 text-center text-[12.5px] text-muted-foreground">
+          会员由作者手动开通，付款后请留意微信消息。
+        </p>
+      </section>
 
-        <div className="mt-16 ">
-          <h2 className="text-center text-3xl font-bold tracking-tight">
-            对定价有建议？
-          </h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-muted-foreground">
-            欢迎提出您的建议，作者将根据您的建议调整定价。
-          </p>
-          <div className="flex flex-col items-center justify-center mt-8">
-            <Image
-              src="/images/wechat-qrcode.png"
-              alt="wechat qrcode"
-              width={250}
-              height={250}
-              className="rounded-md"
-            />
-            <p className="mt-4 text-center text-sm text-muted-foreground">
-              扫码添加微信，向我提出您的建议
-            </p>
+      {/* 说明 */}
+      <section className="border-t border-border/60 bg-muted/20 py-20">
+        <div className="mx-auto max-w-page px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 bg-white px-3 py-1 text-eyebrow text-muted-foreground">
+                <Sparkles className="h-3 w-3 text-primary" />
+                为什么收费
+              </span>
+              <h2 className="mt-5 text-[24px] font-semibold tracking-tight">
+                覆盖成本，把功能做下去
+              </h2>
+              <p className="mt-4 text-[14px] leading-relaxed text-muted-foreground">
+                收费用于承担服务器、数据库等基础设施开销，也让作者能把更多时间投入到维护和开发上，提供更稳定的服务。
+              </p>
+              <p className="mt-3 text-[14px] leading-relaxed text-muted-foreground">
+                感谢理解与支持。
+              </p>
+            </div>
+
+            <div className="flex flex-col justify-between rounded-2xl border border-border bg-white p-7 shadow-card">
+              <div>
+                <h2 className="text-[16px] font-semibold">对定价有建议？</h2>
+                <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
+                  欢迎直接告诉我，我会根据建议调整。
+                </p>
+              </div>
+              <div className="mt-6 flex items-center gap-5">
+                <Image
+                  src="/images/wechat-qrcode.png"
+                  alt="微信二维码"
+                  width={112}
+                  height={112}
+                  className="rounded-xl border border-border"
+                />
+                <div className="text-[13px] leading-relaxed text-muted-foreground">
+                  扫码添加微信
+                  <br />
+                  备注「定价建议」
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* 页脚 */}
+      <footer className="border-t border-border/60">
+        <div className="mx-auto flex max-w-page flex-col gap-3 px-6 py-8 text-[12px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <span>© {new Date().getFullYear()} Bilibili 无限历史记录</span>
+          <div className="flex gap-5">
+            <Link href="/" className="transition-colors hover:text-foreground">
+              首页
+            </Link>
+            <Link
+              href="/privacy"
+              className="transition-colors hover:text-foreground"
+            >
+              隐私政策
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

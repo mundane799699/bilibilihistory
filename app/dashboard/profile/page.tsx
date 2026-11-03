@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   CalendarDays,
@@ -13,10 +12,7 @@ import {
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/session";
 import { getMembershipByUserId } from "@/lib/db/membership_queries";
 
 const planNames: Record<string, string> = {
@@ -43,9 +39,7 @@ function formatDate(value: Date | string) {
 }
 
 export default async function ProfilePage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
 
   if (!session) {
     redirect("/login");
@@ -74,91 +68,95 @@ export default async function ProfilePage() {
         : "免费用户";
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6">
+    <div className="space-y-6">
       <div>
-        <h1 className="mb-2 text-2xl font-bold text-gray-900">个人中心</h1>
-        <p className="text-gray-600">查看您的账号信息和会员权益</p>
+        <h1 className="text-[26px] font-semibold tracking-tight">个人中心</h1>
+        <p className="mt-1.5 text-[13.5px] text-muted-foreground">
+          查看账号信息与会员权益
+        </p>
       </div>
 
-      <Card className="overflow-hidden border-gray-200 shadow-sm">
-        <div className="h-1.5 bg-gradient-to-r from-blue-500 via-sky-400 to-cyan-400" />
-        <CardContent className="p-6 sm:p-8">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex min-w-0 items-center gap-4">
-              <Avatar className="h-16 w-16 border-4 border-blue-50">
-                <AvatarImage
-                  src={session.user.image ?? ""}
-                  alt={`${session.user.name}的头像`}
-                />
-                <AvatarFallback className="bg-blue-500 text-xl font-semibold text-white">
-                  {session.user.name?.charAt(0).toUpperCase() || "用"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="min-w-0">
-                <div className="mb-1.5 flex flex-wrap items-center gap-2">
-                  <h2 className="truncate text-xl font-semibold text-gray-900">
-                    {session.user.name}
-                  </h2>
-                  <Badge
-                    className={
-                      isActiveMember
-                        ? "border-0 bg-amber-100 text-amber-700 hover:bg-amber-100"
-                        : "border-0 bg-gray-100 text-gray-600 hover:bg-gray-100"
-                    }
-                  >
-                    {isActiveMember && <Crown className="mr-1 h-3.5 w-3.5" />}
-                    {planName}
-                  </Badge>
-                </div>
-                <p className="truncate text-sm text-gray-500">
-                  {session.user.email}
-                </p>
+      {/* 账号概览 */}
+      <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-card">
+        <div className="h-1 bg-gradient-to-r from-primary/70 via-primary/40 to-primary/10" />
+        <div className="flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-4">
+            <Avatar className="h-14 w-14 border border-border">
+              <AvatarImage
+                src={session.user.image ?? ""}
+                alt={`${session.user.name}的头像`}
+              />
+              <AvatarFallback className="bg-primary text-[15px] font-semibold text-primary-foreground">
+                {session.user.name?.charAt(0).toUpperCase() || "用"}
+              </AvatarFallback>
+            </Avatar>
+
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="truncate text-[16px] font-semibold">
+                  {session.user.name}
+                </h2>
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-medium ${
+                    isActiveMember
+                      ? "bg-primary/10 text-primary"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {isActiveMember && <Crown className="h-3 w-3" />}
+                  {planName}
+                </span>
               </div>
+              <p className="mt-1 truncate text-[13px] text-muted-foreground">
+                {session.user.email}
+              </p>
             </div>
-
-            {!isActiveMember && (
-              <Button asChild className="bg-blue-500 hover:bg-blue-600">
-                <Link href="/pricing">查看会员方案</Link>
-              </Button>
-            )}
           </div>
-        </CardContent>
-      </Card>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <Card className="border-gray-200 shadow-sm">
-          <CardHeader className="border-b border-gray-100 pb-4">
-            <CardTitle className="flex items-center gap-2 text-lg text-gray-900">
-              <UserRound className="h-5 w-5 text-blue-500" />
-              账号信息
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="divide-y divide-gray-100 px-6 py-1">
-            <div className="flex items-center justify-between gap-6 py-5">
-              <div className="flex items-center gap-3 text-sm text-gray-500">
+          {!isActiveMember && (
+            <Link
+              href="/pricing"
+              className="inline-flex h-10 shrink-0 items-center justify-center rounded-xl bg-primary px-5 text-[13.5px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              查看会员方案
+            </Link>
+          )}
+        </div>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+        {/* 账号信息 */}
+        <div className="rounded-2xl border border-border bg-white shadow-card">
+          <div className="flex items-center gap-2 border-b border-border/60 px-6 py-4">
+            <UserRound className="h-4 w-4 text-primary" />
+            <h2 className="text-[14px] font-semibold">账号信息</h2>
+          </div>
+          <div className="divide-y divide-border/60 px-6">
+            <div className="flex items-center justify-between gap-6 py-4">
+              <span className="flex items-center gap-2.5 text-[13px] text-muted-foreground">
                 <UserRound className="h-4 w-4" />
                 用户名
-              </div>
-              <span className="min-w-0 truncate text-sm font-medium text-gray-900">
+              </span>
+              <span className="min-w-0 truncate text-[13px] font-medium">
                 {session.user.name}
               </span>
             </div>
-            <div className="flex items-center justify-between gap-6 py-5">
-              <div className="flex items-center gap-3 text-sm text-gray-500">
+            <div className="flex items-center justify-between gap-6 py-4">
+              <span className="flex items-center gap-2.5 text-[13px] text-muted-foreground">
                 <Mail className="h-4 w-4" />
                 邮箱
-              </div>
-              <span className="min-w-0 truncate text-sm font-medium text-gray-900">
+              </span>
+              <span className="min-w-0 truncate text-[13px] font-medium">
                 {session.user.email}
               </span>
             </div>
-            <div className="flex items-center justify-between gap-6 py-5">
-              <div className="flex items-center gap-3 text-sm text-gray-500">
+            <div className="flex items-center justify-between gap-6 py-4">
+              <span className="flex items-center gap-2.5 text-[13px] text-muted-foreground">
                 <ShieldCheck className="h-4 w-4" />
                 邮箱状态
-              </div>
+              </span>
               <span
-                className={`text-sm font-medium ${
+                className={`inline-flex items-center gap-1 text-[13px] font-medium ${
                   session.user.emailVerified
                     ? "text-emerald-600"
                     : "text-amber-600"
@@ -167,63 +165,54 @@ export default async function ProfilePage() {
                 {session.user.emailVerified ? "已验证" : "未验证"}
               </span>
             </div>
-            <div className="flex items-center justify-between gap-6 py-5">
-              <div className="flex items-center gap-3 text-sm text-gray-500">
+            <div className="flex items-center justify-between gap-6 py-4">
+              <span className="flex items-center gap-2.5 text-[13px] text-muted-foreground">
                 <CalendarDays className="h-4 w-4" />
                 注册时间
-              </div>
-              <span className="text-sm font-medium text-gray-900">
+              </span>
+              <span className="text-[13px] font-medium">
                 {formatDate(session.user.createdAt)}
               </span>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card
-          className={`overflow-hidden shadow-sm ${
-            isActiveMember
-              ? "border-amber-200 bg-gradient-to-br from-white to-amber-50/60"
-              : "border-gray-200"
-          }`}
-        >
-          <CardHeader className="border-b border-gray-100 pb-4">
-            <div className="flex items-center justify-between gap-4">
-              <CardTitle className="flex items-center gap-2 text-lg text-gray-900">
-                <Crown
-                  className={`h-5 w-5 ${
-                    isActiveMember ? "text-amber-500" : "text-gray-400"
-                  }`}
-                />
-                会员权益
-              </CardTitle>
-              <Badge
-                variant="outline"
-                className={
-                  isActiveMember
-                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                    : "border-gray-200 bg-white text-gray-500"
-                }
-              >
-                {membershipStatus}
-              </Badge>
+        {/* 会员权益 */}
+        <div className="rounded-2xl border border-border bg-white shadow-card">
+          <div className="flex items-center justify-between gap-4 border-b border-border/60 px-6 py-4">
+            <div className="flex items-center gap-2">
+              <Crown
+                className={`h-4 w-4 ${
+                  isActiveMember ? "text-primary" : "text-muted-foreground"
+                }`}
+              />
+              <h2 className="text-[14px] font-semibold">会员权益</h2>
             </div>
-          </CardHeader>
-          <CardContent className="p-6">
-            <div className="mb-6 flex items-start justify-between gap-4 rounded-xl bg-white/80 p-4 ring-1 ring-gray-100">
+            <span
+              className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
+                isActiveMember
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {membershipStatus}
+            </span>
+          </div>
+
+          <div className="p-6">
+            <div className="flex items-start justify-between gap-4 rounded-xl bg-muted/40 p-4">
               <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+                <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                   当前方案
                 </p>
-                <p className="mt-1 text-lg font-semibold text-gray-900">
-                  {planName}
-                </p>
+                <p className="mt-1 text-[15px] font-semibold">{planName}</p>
               </div>
               <div className="text-right">
-                <p className="flex items-center justify-end gap-1.5 text-xs font-medium text-gray-400">
-                  <Clock3 className="h-3.5 w-3.5" />
+                <p className="flex items-center justify-end gap-1.5 text-[11px] font-medium text-muted-foreground">
+                  <Clock3 className="h-3 w-3" />
                   {isActiveMember ? "有效期至" : "会员有效期"}
                 </p>
-                <p className="mt-1 text-sm font-medium text-gray-700">
+                <p className="mt-1 text-[13px] font-medium">
                   {isActiveMember
                     ? expiresAt
                       ? formatDate(expiresAt)
@@ -233,19 +222,19 @@ export default async function ProfilePage() {
               </div>
             </div>
 
-            <div className="space-y-3.5">
+            <div className="mt-5 space-y-3">
               {benefits.map((benefit) => (
-                <div key={benefit} className="flex items-start gap-3">
+                <div key={benefit} className="flex items-start gap-2.5">
                   <span
                     className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
                       isActiveMember
-                        ? "bg-emerald-100 text-emerald-600"
-                        : "bg-blue-100 text-blue-600"
+                        ? "bg-primary/10 text-primary"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
-                    <Check className="h-3.5 w-3.5" />
+                    <Check className="h-3 w-3" />
                   </span>
-                  <span className="text-sm leading-5 text-gray-700">
+                  <span className="text-[13px] leading-5 text-muted-foreground">
                     {benefit}
                   </span>
                 </div>
@@ -253,15 +242,13 @@ export default async function ProfilePage() {
             </div>
 
             {!isActiveMember && (
-              <div className="mt-6 rounded-lg bg-blue-50 px-4 py-3 text-sm text-blue-700">
-                <div className="flex gap-2">
-                  <Sparkles className="mt-0.5 h-4 w-4 shrink-0" />
-                  <p>升级会员可解锁云端同步、多设备查看和更多专属权益。</p>
-                </div>
+              <div className="mt-5 flex gap-2 rounded-xl bg-primary/5 px-4 py-3 text-[12.5px] leading-relaxed text-foreground">
+                <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                <p>升级会员可解锁云端同步、多设备查看和更多专属权益。</p>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

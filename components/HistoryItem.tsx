@@ -21,11 +21,7 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({ item, onDelete }) => {
 
     try {
       setIsDeleting(true);
-
-      // 调用api删除历史记录
       await deleteHistoryItem(item.id);
-
-      // 删除成功，调用父组件的回调函数
       onDelete?.();
     } catch (error) {
       console.error("删除历史记录失败:", error);
@@ -35,64 +31,66 @@ export const HistoryItem: React.FC<HistoryItemProps> = ({ item, onDelete }) => {
     }
   };
 
+  const typeTag = getTypeTag(item.business);
+
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="group overflow-hidden rounded-xl border border-border bg-white shadow-card transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lift">
       <a
         href={getContentUrl(item)}
         target="_blank"
         rel="noopener noreferrer"
-        className="no-underline text-inherit"
+        className="block text-inherit no-underline"
       >
-        <div>
-          <div className="relative">
-            <img
-              src={`${item.cover}@760w_428h_1c.avif`}
-              alt={item.title}
-              className="w-full h-40 object-cover"
-              referrerPolicy="no-referrer"
-            />
-            {getTypeTag(item.business) !== "视频" && (
-              <span className="absolute bottom-2 right-2 px-2 py-1 rounded text-xs text-white bg-[#fb7299]">
-                {getTypeTag(item.business)}
-              </span>
-            )}
-          </div>
-          <div className="p-2.5">
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="m-0 text-sm leading-[1.4] h-10 overflow-hidden line-clamp-2 flex-1">
-                {item.title}
-              </h3>
-              <button
-                className={`p-1 hover:bg-gray-100 rounded-full transition-colors ${
-                  isDeleting ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={handleDelete}
-                disabled={isDeleting}
-                title={isDeleting ? "删除中..." : "删除历史记录"}
-              >
-                <Trash2
-                  className={`w-4 h-4 ${
-                    isDeleting ? "text-gray-300" : "text-gray-500"
-                  }`}
-                />
-              </button>
-            </div>
-            <div className="flex justify-between items-center text-gray-500 text-xs mt-1">
-              <span
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  window.open(
-                    `https://space.bilibili.com/${item.author_mid}`,
-                    "_blank"
-                  );
-                }}
-                className="hover:text-[#fb7299] transition-colors cursor-pointer"
-              >
-                {item.author_name}
-              </span>
-              <span>{new Date(item.view_at * 1000).toLocaleString()}</span>
-            </div>
+        <div className="relative">
+          <img
+            src={`${item.cover}@760w_428h_1c.avif`}
+            alt={item.title}
+            className="h-36 w-full object-cover"
+            referrerPolicy="no-referrer"
+            loading="lazy"
+          />
+          {typeTag !== "视频" && (
+            <span className="absolute bottom-2 right-2 rounded-md bg-primary/90 px-1.5 py-0.5 text-[11px] font-medium text-primary-foreground backdrop-blur">
+              {typeTag}
+            </span>
+          )}
+          <button
+            className={`absolute right-2 top-2 rounded-lg bg-black/50 p-1.5 text-white opacity-0 backdrop-blur transition-opacity hover:bg-black/70 group-hover:opacity-100 ${
+              isDeleting ? "cursor-not-allowed opacity-50" : ""
+            }`}
+            onClick={handleDelete}
+            disabled={isDeleting}
+            title={isDeleting ? "删除中…" : "删除这条记录"}
+            aria-label="删除这条记录"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        <div className="p-3">
+          <h3 className="line-clamp-2 h-10 text-[13.5px] leading-[1.45] text-foreground">
+            {item.title}
+          </h3>
+          <div className="mt-2 flex items-center justify-between gap-2 text-[11.5px] text-muted-foreground">
+            <span
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(
+                  `https://space.bilibili.com/${item.author_mid}`,
+                  "_blank"
+                );
+              }}
+              className="cursor-pointer truncate transition-colors hover:text-primary"
+            >
+              {item.author_name}
+            </span>
+            <span className="shrink-0 tabular-nums">
+              {new Date(item.view_at * 1000).toLocaleDateString("zh-CN", {
+                month: "2-digit",
+                day: "2-digit",
+              })}
+            </span>
           </div>
         </div>
       </a>

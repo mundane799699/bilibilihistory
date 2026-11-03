@@ -105,10 +105,10 @@ function buildDashboardUrl(params: URLSearchParams) {
 
 function HistoryGridSkeleton() {
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] md:gap-4">
       {Array.from({ length: 8 }, (_, index) => (
         <div
-          className="overflow-hidden rounded-lg border border-gray-200 bg-white"
+          className="overflow-hidden rounded-xl border border-border bg-white shadow-card"
           key={index}
         >
           <Skeleton className="h-40 w-full rounded-none" />
@@ -418,64 +418,72 @@ function DashboardContent() {
 
   return (
     <div className="scroll-mt-24" ref={resultsTopRef}>
-      <div className="mx-auto max-w-[1200px]">
-        <HistoryFilters
-          fromDate={fromDateInput}
-          keyword={keywordInput}
-          onDateChange={handleDateDraftChange}
-          onKeywordChange={setKeywordInput}
-          onSearch={handleSearch}
-          toDate={toDateInput}
-        />
-
-        <div aria-live="polite" className="mb-4 text-sm text-gray-500">
-          {isLoading
-            ? "正在加载历史记录…"
-            : error
-              ? "历史记录加载失败"
-              : `找到 ${pagination.totalCount} 条记录`}
+      <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-[26px] font-semibold tracking-tight">
+            历史记录
+          </h1>
+          <p className="mt-1.5 text-[13.5px] text-muted-foreground" aria-live="polite">
+            {isLoading
+              ? "正在加载…"
+              : error
+                ? "加载失败"
+                : `共 ${pagination.totalCount} 条记录`}
+          </p>
         </div>
-
-        {isLoading ? (
-          <HistoryGridSkeleton />
-        ) : error ? (
-          <div className="rounded-lg border border-red-200 bg-white px-6 py-12 text-center">
-            <p className="mb-4 text-sm text-red-600">{error}</p>
-            <Button onClick={() => setRetryNonce((value) => value + 1)}>
-              重新加载
-            </Button>
-          </div>
-        ) : history.length > 0 ? (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
-            {history.map((item) => (
-              <HistoryItem
-                item={item}
-                key={item.id}
-                onDelete={() => handleItemDeleted(item.id)}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="rounded-lg border border-gray-200 bg-white px-6 py-16 text-center text-gray-500">
-            <p>
-              {hasActiveFilters
-                ? "没有找到匹配的历史记录"
-                : "暂无历史记录"}
-            </p>
-          </div>
-        )}
-
-        {!isLoading && !error && (
-          <HistoryPagination
-            onPageChange={handlePageChange}
-            onPageSizeChange={handlePageSizeChange}
-            page={currentPage}
-            pageSize={pageSize}
-            totalCount={pagination.totalCount}
-            totalPages={pagination.totalPages}
-          />
-        )}
       </div>
+
+      <HistoryFilters
+        fromDate={fromDateInput}
+        keyword={keywordInput}
+        onDateChange={handleDateDraftChange}
+        onKeywordChange={setKeywordInput}
+        onSearch={handleSearch}
+        toDate={toDateInput}
+      />
+
+      {isLoading ? (
+        <HistoryGridSkeleton />
+      ) : error ? (
+        <div className="rounded-2xl border border-border bg-white px-6 py-14 text-center shadow-card">
+          <p className="mb-4 text-[13.5px] text-muted-foreground">{error}</p>
+          <Button onClick={() => setRetryNonce((value) => value + 1)}>
+            重新加载
+          </Button>
+        </div>
+      ) : history.length > 0 ? (
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] md:gap-4">
+          {history.map((item) => (
+            <HistoryItem
+              item={item}
+              key={item.id}
+              onDelete={() => handleItemDeleted(item.id)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-2xl border border-dashed border-border bg-white px-6 py-20 text-center">
+          <p className="text-[14px] font-medium">
+            {hasActiveFilters ? "没有找到匹配的记录" : "还没有历史记录"}
+          </p>
+          <p className="mt-1.5 text-[13px] text-muted-foreground">
+            {hasActiveFilters
+              ? "换个关键词或时间范围试试"
+              : "安装插件并登录 B 站后，记录会自动同步过来"}
+          </p>
+        </div>
+      )}
+
+      {!isLoading && !error && (
+        <HistoryPagination
+          onPageChange={handlePageChange}
+          onPageSizeChange={handlePageSizeChange}
+          page={currentPage}
+          pageSize={pageSize}
+          totalCount={pagination.totalCount}
+          totalPages={pagination.totalPages}
+        />
+      )}
     </div>
   );
 }

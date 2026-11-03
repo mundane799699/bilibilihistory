@@ -2,13 +2,9 @@
 
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FileText, MessageSquare } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -21,130 +17,127 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-
     try {
-      const { data, error } = await authClient.signIn.email({
+      const { error } = await authClient.signIn.email({
         email,
         password,
         callbackURL: "/dashboard",
       });
-
-      if (error) {
-        setError(error.message || "登录失败");
-      } else {
-        router.push("/dashboard");
-      }
-    } catch (err) {
+      if (error) setError(error.message || "登录失败");
+      else router.push("/dashboard");
+    } catch {
       setError("登录过程中发生错误");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const field =
+    "h-11 w-full rounded-xl border border-border bg-white px-3.5 text-[14px] outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-foreground/25 focus:ring-4 focus:ring-foreground/5";
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* 导航栏 */}
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <img 
-              src="/images/icon.svg" 
-              alt="Bilibili 无限历史记录 Logo"
-              className="w-8 h-8"
+    <div className="relative flex min-h-screen flex-col bg-white">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-[520px] bg-[radial-gradient(60%_50%_at_50%_0%,rgba(251,114,153,0.12),transparent_70%)]"
+      />
+
+      <header className="relative mx-auto flex w-full max-w-page items-center justify-between px-6 py-5 lg:px-8">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          返回首页
+        </Link>
+        <Link
+          href="/register"
+          className="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+        >
+          还没有账户？<span className="font-medium text-foreground">注册</span>
+        </Link>
+      </header>
+
+      <main className="relative flex flex-1 items-start justify-center px-6 pb-24 pt-10 lg:pt-16">
+        <div className="w-full max-w-[400px]">
+          <div className="text-center">
+            <img
+              src="/images/icon.svg"
+              alt="Bilibili 无限历史记录"
+              className="mx-auto h-11 w-11"
             />
-            <Link href="/" className="text-xl font-bold bg-gradient-to-r from-pink-500 to-blue-500 bg-clip-text text-transparent">
-              Bilibili 无限历史记录
-            </Link>
+            <h1 className="mt-6 text-[26px] font-semibold tracking-tight">
+              登录账户
+            </h1>
+            <p className="mt-2 text-[14px] text-muted-foreground">
+              查看和管理你的全部观看历史
+            </p>
           </div>
-          <div className="flex items-center space-x-6">
-            <Link
-              href="https://v3oxu28gnc.feishu.cn/docx/MZp8dCXd1otO9oxevQUcIlxFnPg?from=from_copylink"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-1 text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
+
+          <form onSubmit={handleSubmit} className="mt-9 space-y-4">
+            <div className="space-y-1.5">
+              <label
+                htmlFor="email"
+                className="block text-[13px] font-medium text-foreground"
+              >
+                邮箱
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className={field}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label
+                htmlFor="password"
+                className="block text-[13px] font-medium text-foreground"
+              >
+                密码
+              </label>
+              <input
+                id="password"
+                type="password"
+                placeholder="输入密码"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className={field}
+              />
+            </div>
+
+            {error && (
+              <p className="rounded-lg bg-red-50 px-3.5 py-2.5 text-[13px] text-red-600">
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary text-[14px] font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              <FileText className="h-4 w-4" />
-              <span>文档</span>
-            </Link>
-            <Link
-              href="https://c1p0xw7om7n.feishu.cn/share/base/form/shrcneS0t8RdC3byY9xC5ftQgub"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center space-x-1 text-gray-700 hover:text-[#00a1d6] font-medium transition-colors"
-            >
-              <MessageSquare className="h-4 w-4" />
-              <span>提交建议</span>
-            </Link>
+              {isLoading ? "登录中…" : "登录"}
+              {!isLoading && <ArrowRight className="h-4 w-4" />}
+            </button>
+          </form>
+
+          <p className="mt-8 text-center text-[13px] text-muted-foreground">
+            还没有账户？{" "}
             <Link
               href="/register"
-              className="bg-[#00a1d6] hover:bg-[#0076a8] text-white px-4 py-1.5 rounded-lg font-medium transition-colors"
+              className="font-medium text-foreground underline-offset-4 hover:underline"
             >
-              注册
+              立即注册
             </Link>
-          </div>
+          </p>
         </div>
-      </nav>
-
-      {/* 登录表单区域 */}
-      <div className="flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8">
-        <Card className="w-full max-w-md">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">
-              登录账户
-            </CardTitle>
-            <p className="text-sm text-gray-600 text-center">
-              输入您的邮箱和密码来登录
-            </p>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">邮箱</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">密码</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="输入密码"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-              {error && (
-                <div className="text-red-500 text-sm text-center">{error}</div>
-              )}
-              <Button
-                type="submit"
-                className="w-full bg-[#00a1d6] hover:bg-[#0076a8]"
-                disabled={isLoading}
-              >
-                {isLoading ? "登录中..." : "登录"}
-              </Button>
-            </form>
-            <div className="mt-4 text-center">
-              <p className="text-sm text-gray-600">
-                还没有账户？{" "}
-                <Link
-                  href="/register"
-                  className="text-[#00a1d6] hover:underline font-medium"
-                >
-                  立即注册
-                </Link>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      </main>
     </div>
   );
 }
