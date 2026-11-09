@@ -136,14 +136,18 @@ const browsers = [
   },
 ];
 
+// 离线安装包版本号，发布新版时只需修改这里
+const EXTENSION_VERSION = "2.3.0";
+const OFFLINE_BASE_URL = "https://cdn.dreamfree.xyz/bilibilihistory";
+
 const offline = [
   {
     name: "Chrome / Edge",
-    href: "https://cdn.dreamfree.xyz/bilibilihistory/bilibili-unlimited-history-1.9.6-chrome.zip",
+    href: `${OFFLINE_BASE_URL}/bilibili-unlimited-history-${EXTENSION_VERSION}-chrome.zip`,
   },
   {
     name: "Firefox",
-    href: "https://cdn.dreamfree.xyz/bilibilihistory/bilibili-unlimited-history-1.9.6-firefox.zip",
+    href: `${OFFLINE_BASE_URL}/bilibili-unlimited-history-${EXTENSION_VERSION}-firefox.zip`,
   },
 ];
 
@@ -554,7 +558,9 @@ export default function Home() {
                   </span>
                 )}
                 <h3 className="text-[15px] font-semibold">{p.name}</h3>
-                <p className="mt-1 text-[13px] text-muted-foreground">{p.desc}</p>
+                <p className="mt-1 text-[13px] text-muted-foreground">
+                  {p.desc}
+                </p>
 
                 <div className="mt-6 flex items-baseline gap-1.5">
                   <span className="text-[13px] text-muted-foreground">¥</span>
