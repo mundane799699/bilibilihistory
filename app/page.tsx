@@ -137,7 +137,7 @@ const browsers = [
 ];
 
 // 离线安装包版本号，发布新版时只需修改这里
-const EXTENSION_VERSION = "2.3.0";
+const EXTENSION_VERSION = "2.3.1";
 const OFFLINE_BASE_URL = "https://cdn.dreamfree.xyz/bilibilihistory";
 
 const offline = [
